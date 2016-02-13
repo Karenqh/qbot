@@ -1,0 +1,126 @@
+[
+    {
+        "outputFile": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 56,
+                    "endOffset": 107
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 180,
+                        "endColumn": 56,
+                        "endOffset": 232
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 112,
+                    "endColumn": 52,
+                    "endOffset": 160
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 52,
+                        "endOffset": 103
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 165,
+                    "endColumn": 71,
+                    "endOffset": 232
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 108,
+                        "endColumn": 71,
+                        "endOffset": 175
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 56,
+                    "endOffset": 107
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 180,
+                        "endColumn": 56,
+                        "endOffset": 232
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 112,
+                    "endColumn": 52,
+                    "endOffset": 160
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 52,
+                        "endOffset": 103
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 165,
+                    "endColumn": 71,
+                    "endOffset": 232
+                },
+                "from": {
+                    "file": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/values/strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 108,
+                        "endColumn": 71,
+                        "endOffset": 175
+                    }
+                }
+            }
+        ]
+    }
+]

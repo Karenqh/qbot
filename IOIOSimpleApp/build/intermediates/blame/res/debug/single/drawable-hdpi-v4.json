@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable-hdpi-v4/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/drawable-hdpi/icon.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable-hdpi-v4/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable-hdpi/icon.png"
+    }
+]
