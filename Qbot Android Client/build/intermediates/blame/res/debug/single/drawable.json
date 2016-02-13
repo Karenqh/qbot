@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/ioio_down.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/drawable/ioio_down.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/icon.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/drawable/icon.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/ioio_down.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/ioio_down.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/icon.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ioio_down.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ioio_down.png"
+    }
+]

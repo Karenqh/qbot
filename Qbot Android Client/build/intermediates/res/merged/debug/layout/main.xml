@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+	<TextView
+	    android:id="@+id/ledTextView"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="LED Test"
+	    android:textSize="20sp" />
+
+	<ToggleButton
+		android:id="@+id/ledToggleButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:layout_margin="20dp"
+		android:textOff="Led is OFF"
+		android:textOn="Led is ON"
+		/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Qbot Controller"
+		android:textSize="20sp" />
+
+	<GridLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:columnCount="3"
+		android:rowCount="3">
+
+		<ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:textOff="Forward"
+			android:textOn="Forward..."
+            android:id="@+id/toggleButtonForward"
+			android:layout_row="0"
+			android:layout_column="1" />
+
+		<ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:textOff="Left"
+			android:textOn="Left..."
+            android:id="@+id/toggleButtonLeft"
+			android:layout_row="1"
+			android:layout_column="0" />
+
+		<ToggleButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:id="@+id/toggleButtonRight"
+			android:textOff="Right"
+			android:textOn="Right..."
+			android:layout_row="1"
+			android:layout_column="2" />
+
+		<ToggleButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:textOff="Back"
+			android:textOn="Back..."
+			android:id="@+id/toggleButtonBack"
+			android:layout_row="2"
+			android:layout_column="1" />
+
+	</GridLayout>
+
+</LinearLayout>
