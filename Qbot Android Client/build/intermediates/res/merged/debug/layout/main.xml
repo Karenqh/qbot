@@ -25,12 +25,41 @@
 		android:text="Qbot Controller"
 		android:textSize="20sp" />
 
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="New Text"
+		android:id="@+id/textView2" />
+
+	<SeekBar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/seekBar" />
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="Small Text"
+		android:id="@+id/textView"
+		android:layout_gravity="center_horizontal" />
+
 	<GridLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
 		android:columnCount="3"
 		android:rowCount="3">
+
+		<ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_margin="20dp"
+			android:textOff="Left"
+			android:textOn="Left..."
+            android:id="@+id/toggleButtonLeft"
+			android:layout_row="0"
+			android:layout_column="0" />
 
 		<ToggleButton
             android:layout_width="wrap_content"
@@ -43,22 +72,36 @@
 			android:layout_column="1" />
 
 		<ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-			android:layout_margin="20dp"
-			android:textOff="Left"
-			android:textOn="Left..."
-            android:id="@+id/toggleButtonLeft"
-			android:layout_row="1"
-			android:layout_column="0" />
-
-		<ToggleButton
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="20dp"
 			android:id="@+id/toggleButtonRight"
 			android:textOff="Right"
 			android:textOn="Right..."
+			android:layout_row="0"
+			android:layout_column="2" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="New Button"
+			android:id="@+id/button"
+			android:layout_row="1"
+			android:layout_column="0" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="New Button"
+			android:id="@+id/button3"
+			android:layout_row="1"
+			android:layout_column="1" />
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="New Button"
+			android:id="@+id/button2"
 			android:layout_row="1"
 			android:layout_column="2" />
 

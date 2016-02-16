@@ -1,26 +1,194 @@
 [
     {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_ratingbar_full_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_ratingbar_full_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_cab_background_top_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_edit_text_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_volume_on.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_volume_on.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_light.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/round_button.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/round_button.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_list_selector_background_transition_holo_light.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_textfield_search_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/pubnub.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/pubnub.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_light.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_btn_default_mtrl_shape.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_volume_muted.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_volume_muted.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_call_dark.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_call_dark.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_pn_chat.jpg",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_pn_chat.jpg"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ioio_down.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ioio_down.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_list_selector_background_transition_holo_dark.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_switch_thumb_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_seekbar_thumb_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_spinner_textfield_background_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/round_button_send.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/round_button_send.xml"
+    },
+    {
         "merged": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/ioio_down.png",
         "source": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/drawable/ioio_down.png"
     },
     {
-        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/icon.png",
-        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/icon.png"
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_btn_borderless_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_borderless_material.xml"
     },
     {
         "merged": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/icon.png",
         "source": "/Users/qiner/Documents/AndroidStudio/IOIOSimpleApp/src/main/res/drawable/icon.png"
     },
     {
-        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/ioio_down.png",
-        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/ioio_down.png"
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_mic_muted.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_mic_muted.png"
     },
     {
         "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/icon.png",
         "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/icon.png"
     },
     {
-        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ioio_down.png",
-        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ioio_down.png"
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_chat.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_chat.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_item_background_holo_dark.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_dialog_material_background_light.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_dialog_material_background_light.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_send_now.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_send_now.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/pow_by_pubnub.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/pow_by_pubnub.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_btn_radio_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/online_circle.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/online_circle.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_dark.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_dialog_material_background_dark.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_dialog_material_background_dark.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_btn_check_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_check_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_pubrtc.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_pubrtc.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_end_call.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_end_call.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_call.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_call.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/light_fade_up.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/light_fade_up.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_btn_colored_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_seekbar_track_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/icon.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/icon.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/build/intermediates/res/merged/debug/drawable/ioio_down.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/IOIOSimpleApp/src/main/res/drawable/ioio_down.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/light_fade_down.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/light_fade_down.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_text_cursor_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_cab_background_internal_bg.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/ic_action_mic.png",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/src/main/res/drawable/ic_action_mic.png"
+    },
+    {
+        "merged": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/res/merged/debug/drawable/abc_tab_indicator_material.xml",
+        "source": "/Users/qiner/Documents/AndroidStudio/qbot/Qbot Android Client/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_tab_indicator_material.xml"
     }
 ]

@@ -8,14 +8,30 @@ import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOActivity;
+import nanqineveryday.qbot.ioio.util.Constants;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.content.SharedPreferences;
+
+import com.pubnub.api.Callback;
+import com.pubnub.api.Pubnub;
+import com.pubnub.api.PubnubError;
+import com.pubnub.api.PubnubException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class QBotActivity extends IOIOActivity {
 	private ToggleButton ledToggleButton_, toggleButtonForward_, toggleButtonBack_, toggleButtonLeft_, toggleButtonRight_;
+	//private SharedPreferences mSharedPreferences;
+	private String username;
+	private String stdByChannel;
+	private Pubnub mPubNub;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +45,59 @@ public class QBotActivity extends IOIOActivity {
 		toggleButtonRight_= (ToggleButton) findViewById(R.id.toggleButtonRight);
 
 		enableUi(false);
+
+		//this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
+		this.username     = Constants.USER_NAME;
+		this.stdByChannel = this.username + Constants.STDBY_SUFFIX;
+
+		initPubNub();
 	}
+	/**
+	 * Subscribe to standby channel so that it doesn't interfere with the WebRTC Signaling.
+	 */
+	public void initPubNub(){
+		this.mPubNub  = new Pubnub(Constants.PUB_KEY, Constants.SUB_KEY);
+		this.mPubNub.setUUID(this.username);
+		subscribeStdBy();
+	}
+
+	/**
+	 * Subscribe to standby channel
+	 */
+	private void subscribeStdBy(){
+		try {
+			this.mPubNub.subscribe(this.stdByChannel, new Callback() {
+				@Override
+				public void successCallback(String channel, Object message) {
+					Log.d("MA-iPN", "MESSAGE: " + message.toString());
+					if (!(message instanceof JSONObject)) return; // Ignore if not JSONObject
+					JSONObject jsonMsg = (JSONObject) message;
+					try {
+						if (!jsonMsg.has(Constants.JSON_CALL_USER)) return;     //Ignore Signaling messages.
+						String user = jsonMsg.getString(Constants.JSON_CALL_USER);
+						dispatchIncomingCall(user);
+					} catch (JSONException e){
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void connectCallback(String channel, Object message) {
+					Log.d("MA-iPN", "CONNECTED: " + message.toString());
+					setUserStatus(Constants.STATUS_AVAILABLE);
+				}
+
+				@Override
+				public void errorCallback(String channel, PubnubError error) {
+					Log.d("MA-iPN","ERROR: " + error.toString());
+				}
+			});
+		} catch (PubnubException e){
+			Log.d("HERE", "HEREEEE");
+			e.printStackTrace();
+		}
+	}
+
 
 	class Looper extends BaseIOIOLooper {
 		public DigitalOutput led_, D1A, D1B, D2A, D2B;
@@ -198,5 +266,49 @@ public class QBotActivity extends IOIOActivity {
 				toggleButtonForward_.setEnabled(enable);
 			}
 		});
+	}
+
+	/**
+	 * Handle incoming calls. TODO: Implement an accept/reject functionality.
+	 * @param userId
+	 */
+	private void dispatchIncomingCall(String userId){
+		Intent intent = new Intent(QBotActivity.this, VideoChatActivity.class);
+		intent.putExtra(Constants.USER_NAME, username);
+		intent.putExtra(Constants.CALL_USER, userId);
+		startActivity(intent);
+	}
+
+	private void setUserStatus(String status){
+		try {
+			JSONObject state = new JSONObject();
+			state.put(Constants.JSON_STATUS, status);
+			this.mPubNub.setState(this.stdByChannel, this.username, state, new Callback() {
+				@Override
+				public void successCallback(String channel, Object message) {
+					Log.d("MA-sUS","State Set: " + message.toString());
+				}
+			});
+		} catch (JSONException e){
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if(this.mPubNub!=null){
+			this.mPubNub.unsubscribeAll();
+		}
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if(this.mPubNub==null){
+			initPubNub();
+		} else {
+			subscribeStdBy();
+		}
 	}
 }

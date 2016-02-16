@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Qbot Android Client</string>
+    <string name="title_activity_video_chat">Video Call</string>
+    <string name="action_settings">Settings</string>
 </resources>
