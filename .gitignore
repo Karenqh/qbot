@@ -1,4 +1,7 @@
 Qbot Android Client/build/
+Qbot Android Client/.idea/
+Qbot Android Client/.gradle/
+.metadata
 # Compiled source #
 ###################
 *.com
