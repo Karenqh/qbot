@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>PnWebRTC + Mobile</title>
+    <title>QBot Web View</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -14,35 +14,31 @@
 </head>
 <body>
 	<div id="header">
-		<h1>AndroidRTC - Built With <a href="https://github.com/GleasonK/pubnub-android-webrtc" target="_blank">PnWebRTC</a></h1>
+		<h1><a>QBot Web View</a></h1>
 		<p id="subtitle">
-			<i>This web interface can receive and send calls to the <a href="https://github.com/GleasonK/AndroidRTC/" target="_blank">Android RTC</a> app.</i>
-			[ <a href="https://github.com/GleasonK/AndroidRTC" target="_blank">Github</a> | <a href="https://github.com/GleasonK/android-webrtc-tutorial" target="_blank">Tutorial</a> ]</i>
+			This web interface can receive and send calls to the <a href="https://github.com/Karenqh/qbot" target="_blank">QBot Android app</a>.
 		</p>
 	</div>
 	<div id="rtc-demo">
-		<div id="vid-box">[<i>Video will appear here</i>]</div>
 		<form name="loginForm" id="login" action="#" onsubmit="return login(this);">
 		    <label for="username">User Name:</label>
 		    <input type="text" name="username" id="username" placeholder="Pick a username!"  size="32"/>
 		    <input type="submit" name="login_submit" value="Log In">
 		</form>
-		
 		<form name="callForm" id="call" action="#" onsubmit="return makeCall(this);">
 			<label for="number">Make Call:</label>
 			<input type="text" name="number" placeholder="Enter user to dial!" size="32"/>
-			<input type="submit" value="Call"/>
+			<input type="submit" value="connect">
 		</form>
+		<button >Call</button>
 		<button onclick="end()">End Call</button><br><br>
+		<div id="vid-box">[<i>Video will appear here</i>]</div>
 		<div id="chat" >
 			Peer Chat:
 			<input type="text" id="chat-msg" placeholder="Enter a message..." size="32" style="margin:2px;" />
 			<button onclick="sendMessage()">Send</button>
 			<div id="chat-box">[<i>Chat will appear here</i>]</div>
 		</div>
-		<p><b>Instructions:</b></p>
-		<p><span class="step-num">1.</span><br>Log in to a username. Box will turn green when a connection is established.</p>
-		<p><span class="step-num">2.</span><br>Either call your AndroidRTC username, or call your web username from the App.</p>
 	</div>
 </body>
 
@@ -93,7 +89,7 @@ function phoneStart() {
 	    number        : userId || "Anonymous", // listen on username line else Anonymous
 	    publish_key   : pub_key, // Your Pub Key
 	    subscribe_key : sub_key, // Your Sub Key
-	    oneway        : true, // one way stream
+	    //oneway        : false, // one way stream
 	});	
 	phone.ready(function(){
 		console.log("Phone ON!");

@@ -1,4 +1,4 @@
-Qbot Android Client/
+qbotandroidapp/
 .metadata
 
 # Compiled source #
@@ -38,3 +38,5 @@ Qbot Android Client/
 .Trashes
 ehthumbs.db
 Thumbs.db
+.project
+.settings/

@@ -5,7 +5,7 @@
 */
 body{
 	margin:0;
-	background: #19a2c6;
+	background: #8757e3;
 	font-family: monospace;
 	color: white;
 	font-size: 14px;
@@ -29,18 +29,8 @@ form {
 #header {
 	text-align: center;
 	/*background: #187998;*/
-	background: #d02129;
+	background: #210008;
 	padding: 5px;
-}
-
-#keys {
-	/*background: #d02129;*/
-	background: #187998;
-	color: white;
-	text-align: center;
-	width:100%;
-	margin: 0;
-	padding: 10px 0;
 }
 
 input[type="text"] {
@@ -48,14 +38,30 @@ input[type="text"] {
 	border-radius: 5px;
 }
 
+button,  input[type="submit"] {
+    background-color: white;
+    border-radius: 2px;
+    border: 2px solid #e7e7e7;
+    color: black;
+    padding: 3px 5px;
+    text-align: center;
+    display: inline-block;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+button:hover, input[type="submit"]:hover{
+    background-color: #cecdcf; 
+    color: black;
+}
+
 #rtc-demo {
-	background: #19a2c6;
 	text-align: center;
 	padding: 10px 0;
 }
 
 #rtc-demo input[type="submit"] {
-	width:50px;
+	width:60px;
 }
 
 #vid-box {
@@ -70,9 +76,10 @@ input[type="text"] {
 	margin: 10px auto;
 	max-height:300px;
 	overflow: auto;
-	border: 3px groove #187998;
-	background: #187998;
+	border: 3px groove #83808d;
+	background: #e7e7e7;
 	width:75%;
+	color: black;
 	max-width:550px;
 	padding: 10px;
 }
