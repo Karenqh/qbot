@@ -109,4 +109,12 @@ input[type="submit"]:hover {
 
 /* Small screens */
 
-@media all and (max-width: 700px) {}
+@media all and (max-width: 700px) {
+  .mainblock {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+ }
+}
