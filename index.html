@@ -31,14 +31,10 @@
         <input type="text" name="number" id="number" placeholder="Enter user to dial!" size="32" />
         <input type="submit" value="connect">
       </form>
-    </div>
-    <div id="videocallblock" class="block">
       <button onclick="makeCall()">Call</button>
       <button onclick="end()">End Call</button>
-      <br>
-      <br>
-      <div id="vid-box">[<i>Video will appear here</i>]</div>
     </div>
+    <div id="vid-box" class="block">[<i>Video will appear here</i>]</div>
     <div class="block" id="controlButton">
       <div class="div-table-row">
         <div class="div-table-cell">
@@ -66,8 +62,8 @@
     <button onclick="sendMessage()">Send</button>
     <div id="chat-box">[<i>Chat will appear here</i>]</div>
   </div>
-
 </body>
+
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -119,11 +115,12 @@ function phoneStart() {
 	});
 	phone.receive(function(session){
 		session.message(message);
-	    session.connected(function(session) { 
+	    session.connected(function(session) {
+	    	vid-box.style.display = 'block';
 	    	video_out.innerHTML="";
 	    	video_out.appendChild(session.video);  
 	    });
-	    session.ended(function(session) { video_out.innerHTML=''; });
+	    session.ended(function(session) { video_out.innerHTML=''; vid-box.style.display = 'none';});
 	});
 }
 
