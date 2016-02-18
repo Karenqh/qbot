@@ -25,12 +25,12 @@
 		    <input type="text" name="username" id="username" placeholder="Pick a username!"  size="32"/>
 		    <input type="submit" name="login_submit" value="Log In">
 		</form>
-		<form name="callForm" id="call" action="#" onsubmit="return makeCall(this);">
+		<form name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
 			<label for="number">Make Call:</label>
-			<input type="text" name="number" placeholder="Enter user to dial!" size="32"/>
+			<input type="text" name="number" id="number" placeholder="Enter user to dial!" size="32"/>
 			<input type="submit" value="connect">
 		</form>
-		<button >Call</button>
+		<button onclick="makeCall()">Call</button>
 		<button onclick="end()">End Call</button><br><br>
 		<div id="vid-box">[<i>Video will appear here</i>]</div>
 		<div id="chat" >
@@ -54,6 +54,7 @@ var pub_key = "pub-c-d77705ee-8dc9-417b-9c49-c726f65d4eeb";
 var sub_key = "sub-c-db247f12-d42b-11e5-8a35-0619f8945a4f";
 var standby_suffix = "-stdby";
 var userId = "";
+var callReceiver = "";
 
 function login(form){
 	userId = form.username.value || "Anonymous";
@@ -66,18 +67,12 @@ function login(form){
 	
 	pubnub.subscribe({                                     
         channel : userIdStdBy,
-        message : incomingCall,
+        state : {"status" : "Available"},
+        message: function(m){console.log()},
         connect: function(e){ 
-	        pubnub.state({
-				channel: userIdStdBy,
-				uuid: userId,
-				state: {"status" : "Available"},
-				callback: function(m){
-					form.login_submit.disabled = true;
-					form.username.style.background="#55ff5b";
-					console.log(JSON.stringify(m))
-				}
-			});
+        	form.login_submit.disabled = true;
+			form.username.style.background="#55ff5b";
+			console.log(JSON.stringify(e));
 	        console.log("Subscribed and ready!");  
 	    }
     });
@@ -106,14 +101,11 @@ function phoneStart() {
 
 //jsonCall.put(Constants.JSON_CALL_USER, username);
 //jsonCall.put(Constants.JSON_CALL_TIME, System.currentTimeMillis());
-function makeCall(form){
-	if (!window.pubnub) alert("Login First!");
-	
-	//Publish to their standby.
-	var callUser = form.number.value;
-	var stdByCh  = callUser + standby_suffix;
+
+function makeCall(){
+	var stdByCh  = callReceiver + standby_suffix;
 	var msg = {"call_user":userId,"call_time":new Date().getMilliseconds()};
-	console.log("HERE" + callUser + stdByCh);
+	console.log("HERE" + callReceiver + stdByCh);
 	window.pubnub.publish({
 		channel:stdByCh,
 		message:msg,
@@ -121,16 +113,32 @@ function makeCall(form){
 	});
 	if (!window.phone) phoneStart();
 // 	window.phone.dial(callUser); 
-	return false;
 }
 
-// {'call_user':'user','call_time':987654321}
-function incomingCall(m){
-	video_out.innerHTML="Connecting...";
-	setTimeout(function(){ 
-		if (!window.phone) phoneStart();
-		phone.dial(m["call_user"]); 
-	}, 2000);
+function connectReceiver(form){
+	if (!window.pubnub) alert("Login First!");
+	callReceiver = form.number.value;
+	//Check whether receiver is online
+	window.pubnub.state({
+		channel:callReceiver+"-stdby",
+	    uuid : callReceiver,
+	    callback: function(m){
+	    	if (m.status=="Available"){
+		                      form.number.style.background="#55ff5b";
+		                      console.log(JSON.stringify(m));	
+	    	}
+	    	else {
+	    		var msg = {"pn_gcm":{"data":{message:"wake up call from qbotweb"}}};
+		    	console.log("HERE publish to gcm channel");
+		    	window.pubnub.publish({
+		    		channel:"GCMPush",
+		    		message:msg,
+		    		callback:function(m){ console.log(m); }
+		    	})
+	    	}
+	    }
+	});	
+	return false;
 }
 
 function end(){
