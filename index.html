@@ -23,12 +23,12 @@
     <div id="login" class="block">
       <form name="loginForm" id="login" action="#" onsubmit="return login(this);">
         <label for="username">User Name:</label>
-        <input type="text" name="username" id="username" placeholder="Pick a username!" size="32" />
+        <input type="search" name="username" id="username" placeholder="Pick a username!" size="32" />
         <input type="submit" name="login_submit" value="Log In">
       </form>
       <form name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
         <label for="number">Make Call:</label>
-        <input type="text" name="number" id="number" placeholder="Enter user to dial!" size="32" />
+        <input type="search" name="number" id="number" placeholder="Enter user to dial!" size="32" />
         <input type="submit" value="connect">
       </form>
       <button onclick="makeCall()">Call</button>
