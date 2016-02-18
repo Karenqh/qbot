@@ -1,86 +1,111 @@
-/* 
-<color name="pn_red">#d02129</color>
-<color name="pn_blue">#19a2c6</color>
-<color name="pn_blue_dark">#187998</color>
-*/
-body{
-	margin:0;
-	background: #8757e3;
-	font-family: monospace;
-	color: white;
-	font-size: 14px;
-}
-
-h1 {
-	margin: 10px 5px;
-}
-
-a {
-	color:white;
-}
-
-form {
-	margin-bottom:1em;
-}
-
-#subtitle {
+body {
+  background: #8757e3;
+  font-family: monospace;
+  color: white;
+  font-size: 14px;
+  text-align: center;
 }
 
 #header {
-	text-align: center;
-	/*background: #187998;*/
-	background: #210008;
-	padding: 5px;
+  text-align: center;
+  background: #210008;
+  padding: 5px;
+}
+
+h1 {
+  margin: 10px 5px;
+}
+
+a {
+  color: white;
+}
+
+form {
+  margin-bottom: 5px;
 }
 
 input[type="text"] {
-	padding: 5px;
-	border-radius: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  width: 100px;
 }
 
-button,  input[type="submit"] {
-    background-color: white;
-    border-radius: 2px;
-    border: 2px solid #e7e7e7;
-    color: black;
-    padding: 3px 5px;
-    text-align: center;
-    display: inline-block;
-    font-size: 12px;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-}
-button:hover, input[type="submit"]:hover{
-    background-color: #cecdcf; 
-    color: black;
-}
-
-#rtc-demo {
-	text-align: center;
-	padding: 10px 0;
+button,
+input[type="submit"] {
+  background-color: white;
+  border-radius: 2px;
+  border: 2px solid #e7e7e7;
+  color: black;
+  padding: 3px 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 12px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  width: 70px;
+  height: 30px;
 }
 
-#rtc-demo input[type="submit"] {
-	width:60px;
+button:hover,
+input[type="submit"]:hover {
+  background-color: #cecdcf;
+  color: black;
 }
 
 #vid-box {
-	margin: 15px;
+  margin: 10px;
+  flex: 2, 1, auto;
 }
 
 #vid-box video {
-	max-height: 500px;
+  max-height: 500px;
 }
 
 #chat-box {
-	margin: 10px auto;
-	max-height:300px;
-	overflow: auto;
-	border: 3px groove #83808d;
-	background: #e7e7e7;
-	width:75%;
-	color: black;
-	max-width:550px;
-	padding: 10px;
+  margin: 10px auto;
+  max-height: 300px;
+  overflow: auto;
+  border: 3px groove #83808d;
+  background: #e7e7e7;
+  width: 75%;
+  color: black;
+  max-width: 550px;
+  padding: 10px;
 }
 
+.mainblock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+}
+
+#controlButton,
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.div-table-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.div-table-row-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.div-table-cell {
+  margin: 6px;
+}
+
+
+/* Small screens */
+
+@media all and (max-width: 700px) {}
