@@ -116,11 +116,11 @@ function phoneStart() {
 	phone.receive(function(session){
 		session.message(message);
 	    session.connected(function(session) {
-	    	vid-box.style.display = 'block';
+	    	video_out.style.display = 'block';
 	    	video_out.innerHTML="";
 	    	video_out.appendChild(session.video);  
 	    });
-	    session.ended(function(session) { video_out.innerHTML=''; vid-box.style.display = 'none';});
+	    session.ended(function(session) { video_out.innerHTML=''; video_out.style.display = 'none';});
 	});
 }
 
