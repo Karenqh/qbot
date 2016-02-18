@@ -55,6 +55,7 @@ input[type="submit"]:hover {
 
 #vid-box {
   margin: 10px;
+  display:none;
   flex: 2, 1, auto;
 }
 
