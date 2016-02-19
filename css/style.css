@@ -21,7 +21,7 @@ body {
 #vid-box {
   display:none;
   min-width:280px;
-  flex: 2;
+  //flex: 2;
 }
 
 #vid-box video {
