@@ -20,21 +20,21 @@
   </div>
   <div id="core" class="flexbox">
     <div id="login" class="block">
-      <label class="control-label">Username</label>
-          <form class="input-group" name="loginForm" id="login" action="#" onsubmit="return login(this);">
+          <label class="control-label">Username</label>
+          <div class="input-group" id="loginform">
              <span class="input-group-addon">@</span>
-             <input type="text" class="form-control" name="username" id="username" placeholder="Skywalker..." >
+             <input type="text" class="form-control" id="username" placeholder="Skywalker..." >
              <span class="input-group-btn">
-                 <button type="submit" name="login_submit" class="btn btn-default">Log In</button>
+                 <button id="login_submit" class="btn btn-default" onclick="login()">Log In</button>
              </span>
-          </form>
-       <label class="control-label">Robot Name</label>
-          <form class="input-group" name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
-             <input type="text" class="form-control" name="number" id="number" placeholder="R2D2..." >
+          </div>
+          <label class="control-label">Robot Name</label>
+          <div class="input-group" id="robotnameform">
+             <input type="text" class="form-control" id="robotname" placeholder="R2D2..." >
              <span class="input-group-btn">
-                 <button type="submit" name="robotname_submit" class="btn btn-default">Connect</button>
+                 <button id="robotname_submit" class="btn btn-default" onclick="connectReceiver()">Connect</button>
              </span>
-          </form>
+          </div><br>
       <div class="div-table-row">
         <button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
         <button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
@@ -98,8 +98,9 @@ var standby_suffix = "-stdby";
 var userId = "";
 var callReceiver = "";
 
-function login(form){
-	userId = form.username.value || "Anonymous";
+function login(){
+	var inputbox = document.getElementById("username")
+	userId = inputbox.value || "Anonymous";
 	var userIdStdBy = userId + standby_suffix;
 	var pubnub = window.pubnub = PUBNUB({                          
         publish_key   : pub_key,
@@ -111,11 +112,12 @@ function login(form){
         channel : userIdStdBy,
         state : {"status" : "Available"},
         message: function(m){console.log()},
-        connect: function(e){ 
-        	form.login_submit.disabled = true;
-        	form.login_submit.className = "btn btn-success disabled";
-			form.username.style.background="#55ff5b";
-			console.log(JSON.stringify(e));
+        connect: function(e){
+        	var button = document.getElementById("login_submit");
+        	button.disabled = true;
+        	button.className = "btn btn-success disabled";
+		inputbox.style.background="#55ff5b";
+		console.log(JSON.stringify(e));
 	        console.log("Subscribed and ready!");  
 	    }
     });
@@ -136,6 +138,7 @@ function phoneStart() {
 		session.message(message);
 	    session.connected(function(session) {
 	    	video_out.style.display = 'block';
+	    	document.getElementById("controlButton").style.display = 'flex';
 	    	video_out.innerHTML="";
 	    	video_out.appendChild(session.video);  
 	    });
@@ -159,18 +162,20 @@ function makeCall(){
 // 	window.phone.dial(callUser); 
 }
 
-function connectReceiver(form){
+function connectReceiver(){
 	if (!window.pubnub) alert("Login First!");
-	callReceiver = form.number.value;
+	var input = document.getElementById("robotname");
+	callReceiver = input.value;
 	//Check whether receiver is online
 	window.pubnub.state({
-		channel:callReceiver+"-stdby",
+	    channel:callReceiver+"-stdby",
 	    uuid : callReceiver,
 	    callback: function(m){
 	    	if (m.status=="Available"){
-		                      form.number.style.background="#55ff5b";
-		                      form.robotname_submit.disabled = true;
-		                  	  form.robotname_submit.className = "btn btn-success disabled";
+		                      input.style.background="#55ff5b";
+		                      var button = document.getElementById("robotname_submit");
+		                      button.disabled = true;
+		                      button.className = "btn btn-success disabled";
 		                      console.log(JSON.stringify(m));	
 	    	}
 	    	else {
@@ -189,6 +194,7 @@ function connectReceiver(form){
 
 function endCall(){
 	if(window.phone) window.phone.hangup();
+	document.getElementById("controlButton").style.display = 'none';
 }
 
 function message( session, message ) {
