@@ -14,22 +14,20 @@
     
 </head>
 <body>
-  <div id="header" class="alert alert-info">
+  <div class="header alert alert-info">
     <h4>QBot Web View</h4>
     <p>This web interface can receive and send calls to the <a href="https://github.com/Karenqh/qbot" target="_blank">QBot Android app</a>.<p>
   </div>
   <div id="core" class="flexbox">
     <div id="login" class="block">
-      <div class="form-group">
-       <label class="control-label">Username</label>
-          <form class="input-group" name="loginForm" id="login" action="#" onsubmit="return login(this);">
+      <label class="control-label">Username</label>
+          <div class="input-group" name="loginForm" id="login" action="#" onsubmit="return login(this);">
              <span class="input-group-addon">@</span>
              <input type="text" class="form-control" name="username" id="username" placeholder="Skywalker..." >
              <span class="input-group-btn">
                  <button type="submit" name="login_submit" class="btn btn-default">Log In</button>
              </span>
-          </form>
-      </div>
+          </div>
       <div class="form-group">
        <label class="control-label">Robot Name</label>
           <form class="input-group" name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
@@ -39,8 +37,10 @@
              </span>
           </form>
       </div>
-      <button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
-      <button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
+      <div class="div-table-row">
+        <button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
+        <button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
+      </div>
     </div>
     <div id="vid-box" class="block">[<i>Video will appear here</i>]</div>
     <div class="block" id="controlButton">
@@ -49,7 +49,7 @@
           <button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
         </div>
       </div>
-      <div class="div-table-row-center">
+      <div class="div-table-row">
         <div class="div-table-cell">
           <button onclick="LeftButton()" class="btn btn-info btn-lg">Left</button>
         </div>
@@ -64,14 +64,26 @@
       </div>
     </div>
   </div>
-  <div class="block" id="chat">
-    Peer Chat:
-    <input type="text" id="chat-msg" placeholder="Enter a message..." size="32" style="margin:2px;" />
-    <button onclick="sendMessage()" class="btn btn-default">Send</button>
-    <div id="chat-box">[<i>Chat will appear here</i>]</div>
+  <div class="flexbox">
+    <div class="block" id="chatblock">
+       <label class="control-label">Chat</label>
+          <div class="input-group" >
+             <input type="text" class="form-control" id="chat-msg" placeholder="Enter a message..." >
+             <span class="input-group-btn">
+                 <button onclick="sendMessage()" class="btn btn-default">Send</button>
+             </span>
+         </div> <br>
+      <div class="panel panel-info">
+  <div class="panel-heading">
+    
+    <h3 class="panel-title">Chat History</h3>
+  </div>
+  <div class="panel-body" id="chat-box">
+    [<i>Chat will appear here</i>]
+  </div>
+</div>
   </div>
 </body>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
