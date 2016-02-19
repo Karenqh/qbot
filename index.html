@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <style>
 	    #vid-box video{
 		    width: 400px;
@@ -13,45 +14,52 @@
     
 </head>
 <body>
-  <div id="header" class="block">
-    <h1>QBot Web View</h1>
-    <p id="subtitle">
-      This web interface can receive and send calls to the <a href="https://github.com/Karenqh/qbot" target="_blank">QBot Android app</a>.
-    </p>
+  <div id="header" class="alert alert-info">
+    <h4>QBot Web View</h4>
+    <p>This web interface can receive and send calls to the <a href="https://github.com/Karenqh/qbot" target="_blank">QBot Android app</a>.<p>
   </div>
-  <div id="core" class="mainblock">
+  <div id="core" class="flexbox">
     <div id="login" class="block">
-      <form name="loginForm" id="login" action="#" onsubmit="return login(this);">
-        <label for="username">User Name:</label>
-        <input type="search" name="username" id="username" placeholder="Pick a username!" size="32" />
-        <input type="submit" name="login_submit" value="Log In">
-      </form>
-      <form name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
-        <label for="number">Make Call:</label>
-        <input type="search" name="number" id="number" placeholder="Enter user to dial!" size="32" />
-        <input type="submit" value="connect">
-      </form>
-      <button onclick="makeCall()">Call</button>
-      <button onclick="end()">End Call</button>
+      <div class="form-group">
+       <label class="control-label">Username</label>
+          <form class="input-group" name="loginForm" id="login" action="#" onsubmit="return login(this);">
+             <span class="input-group-addon">@</span>
+             <input type="text" class="form-control" name="username" id="username" placeholder="Skywalker..." >
+             <span class="input-group-btn">
+                 <button type="submit" name="login_submit" class="btn btn-default">Log In</button>
+             </span>
+          </form>
+      </div>
+      <div class="form-group">
+       <label class="control-label">Robot Name</label>
+          <form class="input-group" name="callForm" id="call" action="#" onsubmit="return connectReceiver(this);">
+             <input type="text" class="form-control" name="number" id="number" placeholder="R2D2..." >
+             <span class="input-group-btn">
+                 <button type="submit" name="robotname_submit" class="btn btn-default">Connect</button>
+             </span>
+          </form>
+      </div>
+      <button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
+      <button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
     </div>
     <div id="vid-box" class="block">[<i>Video will appear here</i>]</div>
     <div class="block" id="controlButton">
       <div class="div-table-row">
         <div class="div-table-cell">
-          <button onclick="fowardButton()">Foward</button>
+          <button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
         </div>
       </div>
       <div class="div-table-row-center">
         <div class="div-table-cell">
-          <button onclick="LeftButton()">Left</button>
+          <button onclick="LeftButton()" class="btn btn-info btn-lg">Left</button>
         </div>
         <div class="div-table-cell">
-          <button onclick="RightButton()">Right</button>
+          <button onclick="RightButton()" class="btn btn-info btn-lg">Right</button>
         </div>
       </div>
       <div class="div-table-row">
         <div class="div-table-cell">
-          <button onclick="backButton()">Back</button>
+          <button onclick="backButton()" class="btn btn-info btn-lg">Back</button>
         </div>
       </div>
     </div>
@@ -59,14 +67,14 @@
   <div class="block" id="chat">
     Peer Chat:
     <input type="text" id="chat-msg" placeholder="Enter a message..." size="32" style="margin:2px;" />
-    <button onclick="sendMessage()">Send</button>
+    <button onclick="sendMessage()" class="btn btn-default">Send</button>
     <div id="chat-box">[<i>Chat will appear here</i>]</div>
   </div>
 </body>
 
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="https://cdn.pubnub.com/pubnub.min.js"></script>
 <script src="js/webrtc.js"></script>
 <script type="text/javascript">
@@ -95,6 +103,7 @@ function login(form){
         message: function(m){console.log()},
         connect: function(e){ 
         	form.login_submit.disabled = true;
+        	form.login_submit.className = "btn btn-success disabled";
 			form.username.style.background="#55ff5b";
 			console.log(JSON.stringify(e));
 	        console.log("Subscribed and ready!");  
@@ -150,6 +159,8 @@ function connectReceiver(form){
 	    callback: function(m){
 	    	if (m.status=="Available"){
 		                      form.number.style.background="#55ff5b";
+		                      form.robotname_submit.disabled = true;
+		                  	  form.robotname_submit.className = "btn btn-success disabled";
 		                      console.log(JSON.stringify(m));	
 	    	}
 	    	else {
@@ -166,7 +177,7 @@ function connectReceiver(form){
 	return false;
 }
 
-function end(){
+function endCall(){
 	if(window.phone) window.phone.hangup();
 }
 

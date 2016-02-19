@@ -1,66 +1,45 @@
-body {
-  background: #8757e3;
-  font-family: monospace;
-  color: white;
-  font-size: 14px;
+body{
   text-align: center;
 }
 
 #header {
   text-align: center;
-  background: #210008;
-  padding: 5px;
+  padding: 0.8em;
 }
-
-h1 {
-  margin: 10px 5px;
+.flexbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap:wrap;
+  align-items: center;
+  margin: 50px 0;
 }
-
-a {
-  color: white;
-}
-
-form {
-  margin-bottom: 5px;
-}
-
-input[type="text"] {
-  padding: 5px;
-  border-radius: 5px;
-  width: 100px;
-}
-
-button,
-input[type="submit"] {
-  background-color: white;
-  border-radius: 2px;
-  border: 2px solid #e7e7e7;
-  color: black;
-  padding: 3px 5px;
-  text-align: center;
-  display: inline-block;
-  font-size: 12px;
-  -webkit-transition-duration: 0.4s;
-  /* Safari */
-  transition-duration: 0.4s;
-  width: 70px;
-  height: 30px;
-}
-
-button:hover,
-input[type="submit"]:hover {
-  background-color: #cecdcf;
-  color: black;
-}
+form {width:250px}
 
 #vid-box {
-  margin: 10px;
   display:none;
+  min-width:300px;
   flex: 2, 1, auto;
 }
 
 #vid-box video {
   max-height: 500px;
+}
+
+#controlButton,
+{
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.div-table-row-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.div-table-cell {
+  margin: 6px;
 }
 
 #chat-box {
@@ -74,47 +53,5 @@ input[type="submit"]:hover {
   max-width: 550px;
   padding: 10px;
 }
-
-.mainblock {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 0;
-}
-
-#controlButton,
-{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.div-table-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.div-table-row-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.div-table-cell {
-  margin: 6px;
-}
-
-
 /* Small screens */
 
-@media all and (max-width: 700px) {
-  .mainblock {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 0;
- }
-}
