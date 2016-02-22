@@ -1,237 +1,92 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>QBot Web View</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <style>
-	    #vid-box video{
-		    width: 400px;
-	    }
-    </style>
-    
+<title>QBot Web View</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-  <div class="header alert alert-info">
-    <h4>QBot Web View</h4>
-    <p>This web interface can receive and send calls to the <a href="https://github.com/Karenqh/qbot" target="_blank">QBot Android app</a>.<p>
-  </div>
-  <div id="core" class="flexbox">
-    <div id="login" class="block">
-          <label class="control-label">Username</label>
-          <div class="input-group" id="loginform">
-             <span class="input-group-addon">@</span>
-             <input type="text" class="form-control" id="username" placeholder="Skywalker..." >
-             <span class="input-group-btn">
-                 <button id="login_submit" class="btn btn-default" onclick="login()">Log In</button>
-             </span>
-          </div>
-          <label class="control-label">Robot Name</label>
-          <div class="input-group" id="robotnameform">
-             <input type="text" class="form-control" id="robotname" placeholder="R2D2..." >
-             <span class="input-group-btn">
-                 <button id="robotname_submit" class="btn btn-default" onclick="connectReceiver()">Connect</button>
-             </span>
-          </div><br>
-      <div class="div-table-row">
-        <button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
-        <button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
-      </div>
-    </div>
-    <div id="vid-box" class="block">[<i>Video will appear here</i>]</div>
-    <div class="block" id="controlButton">
-      <div class="div-table-row">
-        <div class="div-table-cell">
-          <button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
-        </div>
-      </div>
-      <div class="div-table-row">
-        <div class="div-table-cell">
-          <button onclick="LeftButton()" class="btn btn-info btn-lg">Left</button>
-        </div>
-        <div class="div-table-cell">
-          <button onclick="RightButton()" class="btn btn-info btn-lg">Right</button>
-        </div>
-      </div>
-      <div class="div-table-row">
-        <div class="div-table-cell">
-          <button onclick="backButton()" class="btn btn-info btn-lg">Back</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="flexbox">
-    <div class="block" id="chatblock">
-       <label class="control-label">Chat</label>
-          <div class="input-group" >
-             <input type="text" class="form-control" id="chat-msg" placeholder="Enter a message..." >
-             <span class="input-group-btn">
-                 <button onclick="sendMessage()" class="btn btn-default">Send</button>
-             </span>
-         </div> <br>
-      <div class="panel panel-info">
-  <div class="panel-heading">
-    
-    <h3 class="panel-title">Chat History</h3>
-  </div>
-  <div class="panel-body" id="chat-box">
-    [<i>Chat will appear here</i>]
-  </div>
-</div>
-  </div>
+	<div class="header alert alert-info">
+		<h4>QBot Web View</h4>
+		<p>
+			This web interface can monitor and control <a
+				href="https://github.com/Karenqh/qbot" target="_blank">QBot
+				Android app</a>.
+		<p>
+	</div>
+	<div id="core" class="flexbox">
+		<div id="login" class="block">
+			<label class="control-label">Username</label>
+			<div class="input-group" id="loginform">
+				<span class="input-group-addon">@</span> <input type="text"
+					class="form-control" id="username" placeholder="Skywalker...">
+				<span class="input-group-btn">
+					<button id="login_submit" class="btn btn-default" onclick="login()">Log
+						In</button>
+				</span>
+			</div>
+			<label class="control-label">Robot Name</label>
+			<div class="input-group" id="robotnameform">
+				<input type="text" class="form-control" id="robotname"
+					placeholder="R2D2..."> <span class="input-group-btn">
+					<button id="robotname_submit" class="btn btn-default"
+						onclick="connectRobot()">Connect</button>
+				</span>
+			</div>
+			<br>
+			<div class="div-table-row">
+				<button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
+				<button onclick="endCall()" class="btn btn-primary btn-lg">End
+					Call</button>
+			</div>
+		</div>
+		<!-- Begin video block -->
+		<div id="vidBlock" class="flexbox_vertical block">
+			<div id="vidIn"></div>
+			<div id="vidOut"></div>
+			<div id="inCallBlock"> <!-- Buttons for in call features -->
+				<button id="audioToggle" class="btn btn-primary" onclick="audioToggle()">Audio On</button>
+				<button id="videoToggle" class="btn btn-primary" onclick="videoToggle()">Video On</button>
+			</div>
+		</div>
+		<!-- Begin control buttons block -->
+		<div class="flexbox_vertical block" id="motionBlock">
+			<div class="div-table-row">
+				<div class="div-table-cell">
+					<button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
+				</div>
+			</div>
+			<div class="div-table-row">
+				<div class="div-table-cell">
+					<button onclick="LeftButton()" class="btn btn-info btn-lg">Left</button>
+				</div>
+				<div class="div-table-cell">
+					<button onclick="RightButton()" class="btn btn-info btn-lg">Right</button>
+				</div>
+			</div>
+			<div class="div-table-row">
+				<div class="div-table-cell">
+					<button onclick="backButton()" class="btn btn-info btn-lg">Back</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="flexbox">
+		<div class="block" id="chatblock">
+           <!-- chat function deleted -->
+		</div>
+	</div>
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
+<script src="js/pubnub.min.js"></script>
 <script src="js/webrtc.js"></script>
-<script type="text/javascript">
-
-var video_out = document.getElementById("vid-box");
-var chat_box  = document.getElementById("chat-box");
-var chat_msg  = document.getElementById("chat-msg");
-var pub_key = "pub-c-d77705ee-8dc9-417b-9c49-c726f65d4eeb";
-var sub_key = "sub-c-db247f12-d42b-11e5-8a35-0619f8945a4f";
-var standby_suffix = "-stdby";
-var userId = "";
-var callReceiver = "";
-
-function login(){
-	var inputbox = document.getElementById("username")
-	userId = inputbox.value || "Anonymous";
-	var userIdStdBy = userId + standby_suffix;
-	var pubnub = window.pubnub = PUBNUB({                          
-        publish_key   : pub_key,
-        subscribe_key : sub_key,
-        uuid: userId
-	});
-	
-	pubnub.subscribe({                                     
-        channel : userIdStdBy,
-        state : {"status" : "Available"},
-        message: function(m){console.log()},
-        connect: function(e){
-        	var button = document.getElementById("login_submit");
-        	button.disabled = true;
-        	button.className = "btn btn-success disabled";
-		inputbox.style.background="#55ff5b";
-		console.log(JSON.stringify(e));
-	        console.log("Subscribed and ready!");  
-	    }
-    });
-    return false;
-}
-
-function phoneStart() {
-	var phone = window.phone = PHONE({
-	    number        : userId || "Anonymous", // listen on username line else Anonymous
-	    publish_key   : pub_key, // Your Pub Key
-	    subscribe_key : sub_key, // Your Sub Key
-	    oneway        : true, // one way stream
-	});	
-	phone.ready(function(){
-		console.log("Phone ON!");
-	});
-	phone.receive(function(session){
-		session.message(message);
-	    session.connected(function(session) {
-	    	video_out.style.display = 'block';
-	    	document.getElementById("controlButton").style.display = 'flex';
-	    	video_out.innerHTML="";
-	    	video_out.appendChild(session.video);  
-	    });
-	    session.ended(function(session) { video_out.innerHTML=''; video_out.style.display = 'none';});
-	});
-}
-
-//jsonCall.put(Constants.JSON_CALL_USER, username);
-//jsonCall.put(Constants.JSON_CALL_TIME, System.currentTimeMillis());
-
-function makeCall(){
-	var stdByCh  = callReceiver + standby_suffix;
-	var msg = {"call_user":userId,"call_time":new Date().getMilliseconds()};
-	console.log("HERE" + callReceiver + stdByCh);
-	window.pubnub.publish({
-		channel:stdByCh,
-		message:msg,
-		callback:function(m){ console.log(m); }
-	});
-	if (!window.phone) phoneStart();
-// 	window.phone.dial(callUser); 
-}
-
-function connectReceiver(){
-	if (!window.pubnub) alert("Login First!");
-	var input = document.getElementById("robotname");
-	callReceiver = input.value;
-	//Check whether receiver is online
-	window.pubnub.state({
-	    channel:callReceiver+"-stdby",
-	    uuid : callReceiver,
-	    callback: function(m){
-	    	if (m.status=="Available"){
-		                      input.style.background="#55ff5b";
-		                      var button = document.getElementById("robotname_submit");
-		                      button.disabled = true;
-		                      button.className = "btn btn-success disabled";
-		                      console.log(JSON.stringify(m));	
-	    	}
-	    	else {
-	    		var msg = {"pn_gcm":{"data":{message:"wake up call from qbotweb"}}};
-		    	console.log("HERE publish to gcm channel");
-		    	window.pubnub.publish({
-		    		channel:"GCMPush",
-		    		message:msg,
-		    		callback:function(m){ console.log(m); }
-		    	})
-	    	}
-	    }
-	});	
-	return false;
-}
-
-function endCall(){
-	if(window.phone) window.phone.hangup();
-	document.getElementById("controlButton").style.display = 'none';
-}
-
-function message( session, message ) {
-    add_chat( session.number, message );
-}
-
-function add_chat(number, message){
-	console.log(number + ": " + message);
-	chat_box.innerHTML = "<p>" + number+" ("+ formatTime(message["msg_timestamp"]) +"): " + message["msg_message"] + "</p>" + chat_box.innerHTML;
-}
-
-function sendMessage(){
-	var msg = chat_msg.value;
-	if (msg==='' || !window.phone) return alert("Not in a call.");
-	var chatMsg = {'msg_uuid': safetxt(userId), 'msg_message': safetxt(msg), 'msg_timestamp':new Date().getTime()};
-	phone.send(chatMsg);
-	console.log(msg);
-	add_chat("Me: ", chatMsg);
-}
-
-// Will format in 12-hour h:mm.s a time format
-function formatTime(millis){
-	var d = new Date(millis);
-	var h = d.getHours();
-	var m = d.getMinutes();
-	var s = d.getSeconds();
-	var a = (Math.floor(h/12)===0) ? "am" : "pm";
-	return (h%12)+":"+m+"."+s + " " + a;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
-// XSS Prevent
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
-function safetxt(text) {
-    return (''+text).replace( /[<>]/g, '' );
-}
-
-</script>
+<script src="js/rtc-controller.js"></script>
+<script src="js/index.js"></script>
 
 </html>
