@@ -46,6 +46,7 @@ public class QBotActivity extends IOIOActivity {
 	//private SharedPreferences mSharedPreferences;
 	private String username;
 	private String stdByChannel;
+	private String userStdByChannel;
 	private Pubnub mPubNub;
 
 	@Override
@@ -68,7 +69,7 @@ public class QBotActivity extends IOIOActivity {
 		//this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
 		this.username     = Constants.USER_NAME;
 		this.stdByChannel = this.username + Constants.STDBY_SUFFIX;
-
+        this.userStdByChannel = Constants.CALL_USER  + Constants.STDBY_SUFFIX;
 		initPubNub();
 
 		if (checkPlayServices()) {
@@ -99,9 +100,20 @@ public class QBotActivity extends IOIOActivity {
 					if (!(message instanceof JSONObject)) return; // Ignore if not JSONObject
 					JSONObject jsonMsg = (JSONObject) message;
 					try {
-						if (!jsonMsg.has(Constants.JSON_CALL_USER)) return;     //Ignore Signaling messages.
-						String user = jsonMsg.getString(Constants.JSON_CALL_USER);
-						dispatchIncomingCall(user);
+						if (jsonMsg.has(Constants.JSON_CALL_USER)) {
+							String user = jsonMsg.getString(Constants.JSON_CALL_USER);
+							dispatchIncomingCall(user);
+						} else if (jsonMsg.has(Constants.JSON_POWER)){ //turn off application
+							if (jsonMsg.getString(Constants.JSON_POWER).equals(Constants.JSON_POWER_OFF)) {
+								JSONObject jso = new JSONObject();
+								try {
+									jso.put("status", "Offline");
+								} catch (JSONException e) { }
+								publishMessage(userStdByChannel, jso);
+								Log.i(TAG, "Exit application on request by the user");
+								finish();
+							}
+						} else return;     //Ignore Signaling messages.}
 					} catch (JSONException e){
 						e.printStackTrace();
 					}
@@ -111,6 +123,11 @@ public class QBotActivity extends IOIOActivity {
 				public void connectCallback(String channel, Object message) {
 					Log.d("MA-iPN", "CONNECTED: " + message.toString());
 					setUserStatus(Constants.STATUS_AVAILABLE);
+					JSONObject jso = new JSONObject();
+					try {
+						jso.put("status", "Available");
+					} catch (JSONException e) { }
+					publishMessage(userStdByChannel, jso);
 				}
 
 				@Override
@@ -124,6 +141,17 @@ public class QBotActivity extends IOIOActivity {
 		}
 	}
 
+	private void publishMessage(String channel, JSONObject jsomessage){
+		Callback callback = new Callback() {
+			public void successCallback(String channel, Object response) {
+				Log.i(TAG, "Success publishing to: "+ channel);
+			}
+			public void errorCallback(String channel, PubnubError error) {
+				Log.i(TAG, "Error publishing to : " + channel);
+			}
+		};
+		mPubNub.publish(channel, jsomessage, callback);
+	}
 
 	class Looper extends BaseIOIOLooper {
 		public DigitalOutput led_, D1A, D1B, D2A, D2B;
@@ -327,6 +355,12 @@ public class QBotActivity extends IOIOActivity {
 			this.mPubNub.unsubscribeAll();
 		}
 	}
+	protected void onDestroy(){
+		super.onDestroy();
+		if(this.mPubNub!=null){
+			this.mPubNub.unsubscribeAll();
+		}
+	}
 
 	@Override
 	protected void onRestart() {
@@ -366,7 +400,6 @@ public class QBotActivity extends IOIOActivity {
 			jso.put("GCMSays", "hi");
 		} catch (JSONException e) { }
 		gcmMessage.setData(jso);
-
 		PnMessage message = new PnMessage(
 				this.mPubNub,
 				"GCMPush",

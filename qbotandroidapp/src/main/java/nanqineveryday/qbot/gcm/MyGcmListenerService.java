@@ -17,6 +17,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import nanqineveryday.qbot.QBotActivity;
 import nanqineveryday.qbot.R;
+import nanqineveryday.qbot.util.Constants;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -36,30 +37,16 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
+        if (message.equals("GCMwakeUpCall_"+ Constants.USER_NAME)) {
+            // start main activity
+            Log.i(TAG, "Activity waked up by remote user");
+            Intent intent = new Intent(this, QBotActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         } else {
             // normal downstream message.
+            sendNotification(message);
         }
-
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
-        sendNotification(message);
-        // [END_EXCLUDE]
-
-        Intent intent = new Intent(this, QBotActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
     // [END receive_message]
 
@@ -70,10 +57,8 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message) {
         Log.i(TAG, "Sending Notification");
-
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, QBotActivity.class), 0);
-
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
