@@ -69,7 +69,8 @@ function phoneStart() {
 		number : userId || "Anonymous", // listen on username line else anonymous
 		publish_key : pub_key, // Your Pub Key
 		subscribe_key : sub_key, // Your Sub Key
-		oneway : true, // one way stream
+		ssl : true,
+		media: { audio : true, video : false },
 	});
 	phone.ready(function(){
 		console.log("Phone ON!");

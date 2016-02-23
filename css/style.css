@@ -25,31 +25,26 @@ body {
 
 .block {
 	margin: auto;
-	padding:10px, 5px;
+	padding:30px, 10px;
 }
 
 #vidBlock {
-  display:none;
+  display:flex;
   width: 500px;
   //flex: 2;
 }
 
-#vidStream video {
-  //max-height: 500px;
-}
-
 #motionBlock {
-  display:none;
+  display:flex;
+  min-height: 150px;
+  
 }
 
 .div-table-row {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-}
-
-.div-table-cell {
-  margin: 0.3em  0.7em;
+  min-width : 220px;
 }
 
 /* Small screens */
@@ -58,7 +53,7 @@ body {
   font-size:12px;
  }
  
-#vidStream {
+#vidBlock{
   width: 360px;
   //flex: 2;
 }
