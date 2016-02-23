@@ -11,12 +11,17 @@ import ioio.lib.util.android.IOIOActivity;
 import nanqineveryday.qbot.gcm.RegistrationIntentService;
 import nanqineveryday.qbot.gcm.gcmPreferences;
 import nanqineveryday.qbot.util.Constants;
+import nanqineveryday.qbot.util.IOIOCommands;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -39,7 +44,7 @@ import com.pubnub.api.PubnubException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class QBotActivity extends IOIOActivity {
+public class QBotActivity extends Activity {
 	private ToggleButton ledToggleButton_, toggleButtonForward_, toggleButtonBack_, toggleButtonLeft_, toggleButtonRight_;
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	private static final String TAG = "MainActivity";
@@ -48,35 +53,116 @@ public class QBotActivity extends IOIOActivity {
 	private String stdByChannel;
 	private String userStdByChannel;
 	private Pubnub mPubNub;
+	//service bounding
+	BgIOIOService mService;
+	boolean mBound = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-				             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-				             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-				             WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-
-		ledToggleButton_ = (ToggleButton) findViewById(R.id.ledToggleButton);
-		toggleButtonBack_= (ToggleButton) findViewById(R.id.toggleButtonBack);
-		toggleButtonForward_= (ToggleButton) findViewById(R.id.toggleButtonForward);
-		toggleButtonLeft_= (ToggleButton) findViewById(R.id.toggleButtonLeft);
-		toggleButtonRight_= (ToggleButton) findViewById(R.id.toggleButtonRight);
-
-		enableUi(false);
-
-		//this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
-		this.username     = Constants.USER_NAME;
-		this.stdByChannel = this.username + Constants.STDBY_SUFFIX;
-        this.userStdByChannel = Constants.CALL_USER  + Constants.STDBY_SUFFIX;
-		initPubNub();
-
+		//Register with GCM
 		if (checkPlayServices()) {
 			// Start IntentService to register this application with GCM.
 			Intent intent = new Intent(QBotActivity.this, RegistrationIntentService.class);
 			startService(intent);
 		}
+		//Start IOIO Background Service
+		startService(new Intent(this, BgIOIOService.class));
+		//Set layout
+		setContentView(R.layout.main);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+				WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+		//find buttons
+		ledToggleButton_ = (ToggleButton) findViewById(R.id.ledToggleButton);
+		toggleButtonBack_= (ToggleButton) findViewById(R.id.toggleButtonBack);
+		toggleButtonForward_= (ToggleButton) findViewById(R.id.toggleButtonForward);
+		toggleButtonLeft_= (ToggleButton) findViewById(R.id.toggleButtonLeft);
+		toggleButtonRight_= (ToggleButton) findViewById(R.id.toggleButtonRight);
+		//button listeners
+		ledToggleButton_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(mBound) {if (isChecked) {
+					mService.setIOIOCommand(IOIOCommands.LED);
+				} else {
+					mService.setIOIOCommand(IOIOCommands.STANDBY);
+				}}
+			}
+		});
+		toggleButtonBack_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(mBound) {if (isChecked) {
+					mService.setIOIOCommand(IOIOCommands.BACK);
+					toggleButtonRight_.setEnabled(false);
+					toggleButtonLeft_.setEnabled(false);
+					toggleButtonForward_.setEnabled(false);
+				} else {
+					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					toggleButtonRight_.setEnabled(true);
+					toggleButtonLeft_.setEnabled(true);
+					toggleButtonForward_.setEnabled(true);
+				}}
+			}
+		});
+		toggleButtonForward_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(mBound) {if (isChecked) {
+					mService.setIOIOCommand(IOIOCommands.FORWARD);
+					toggleButtonRight_.setEnabled(false);
+					toggleButtonLeft_.setEnabled(false);
+					toggleButtonBack_.setEnabled(false);
+				} else {
+					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					toggleButtonRight_.setEnabled(true);
+					toggleButtonLeft_.setEnabled(true);
+					toggleButtonBack_.setEnabled(true);
+				}}
+			}
+		});
+		toggleButtonLeft_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(mBound) {if (isChecked) {
+					mService.setIOIOCommand(IOIOCommands.LEFT);
+					toggleButtonRight_.setEnabled(false);
+					toggleButtonBack_.setEnabled(false);
+					toggleButtonForward_.setEnabled(false);
+				} else {
+					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					toggleButtonRight_.setEnabled(true);
+					toggleButtonBack_.setEnabled(true);
+					toggleButtonForward_.setEnabled(true);
+				}}
+			}
+		});
+		toggleButtonRight_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(mBound) {if (isChecked) {
+					mService.setIOIOCommand(IOIOCommands.RIGHT);
+					toggleButtonBack_.setEnabled(false);
+					toggleButtonLeft_.setEnabled(false);
+					toggleButtonForward_.setEnabled(false);
+				} else {
+					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					toggleButtonBack_.setEnabled(true);
+					toggleButtonLeft_.setEnabled(true);
+					toggleButtonForward_.setEnabled(true);
+				}}
+			}
+		});
+		//this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
+		this.username     = Constants.USER_NAME;
+		this.stdByChannel = this.username + Constants.STDBY_SUFFIX;
+        this.userStdByChannel = Constants.CALL_USER  + Constants.STDBY_SUFFIX;
+		initPubNub();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		// Bind to LocalService
+		Intent intent = new Intent(this, BgIOIOService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	/**
@@ -153,174 +239,8 @@ public class QBotActivity extends IOIOActivity {
 		mPubNub.publish(channel, jsomessage, callback);
 	}
 
-	class Looper extends BaseIOIOLooper {
-		public DigitalOutput led_, D1A, D1B, D2A, D2B;
-		public PwmOutput PWM1, PWM2;
 
-		@Override
-		public void setup() throws ConnectionLostException {
-			led_ = ioio_.openDigitalOutput(IOIO.LED_PIN, true);
-			D1A = ioio_.openDigitalOutput(41, false);  //left side motor
-			D1B = ioio_.openDigitalOutput(42, false);
-			D2A = ioio_.openDigitalOutput(43, false);
-			D2B = ioio_.openDigitalOutput(44, false);
-			PWM1 = ioio_.openPwmOutput(40, 100); //left side motor
-			PWM1.setDutyCycle(0);
-			PWM2 = ioio_.openPwmOutput(45, 100);
-			PWM2.setDutyCycle(0);
 
-			ledToggleButton_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (isChecked) {
-							led_.write(!ledToggleButton_.isChecked());
-						} else {
-							led_.write(!ledToggleButton_.isChecked());
-						}
-					} catch (ConnectionLostException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			toggleButtonBack_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (isChecked) {
-							toggleButtonRight_.setEnabled(false);
-							toggleButtonLeft_.setEnabled(false);
-							toggleButtonForward_.setEnabled(false);
-							PWM1.setDutyCycle((float) 0.8);
-							PWM2.setDutyCycle((float) 0.8);
-							D1A.write(false);
-							D1B.write(true);
-							D2A.write(false);
-							D2B.write(true);
-						} else {
-							toggleButtonRight_.setEnabled(true);
-							toggleButtonLeft_.setEnabled(true);
-							toggleButtonForward_.setEnabled(true);
-							PWM1.setDutyCycle(0);
-							PWM2.setDutyCycle(0);
-						}
-					} catch (ConnectionLostException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			toggleButtonForward_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (isChecked) {
-							toggleButtonRight_.setEnabled(false);
-							toggleButtonLeft_.setEnabled(false);
-							toggleButtonBack_.setEnabled(false);
-							PWM1.setDutyCycle((float) 1);
-							PWM2.setDutyCycle((float) 1);
-							D1A.write(true);
-							D1B.write(false);
-							D2A.write(true);
-							D2B.write(false);
-						} else {
-							toggleButtonRight_.setEnabled(true);
-							toggleButtonLeft_.setEnabled(true);
-							toggleButtonBack_.setEnabled(true);
-							PWM1.setDutyCycle(0);
-							PWM2.setDutyCycle(0);
-						}
-					} catch (ConnectionLostException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			toggleButtonLeft_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (isChecked) {
-							toggleButtonRight_.setEnabled(false);
-							toggleButtonBack_.setEnabled(false);
-							toggleButtonForward_.setEnabled(false);
-							PWM1.setDutyCycle(1);
-							PWM2.setDutyCycle(1);
-							D1A.write(false);
-							D1B.write(true);
-							D2A.write(true);
-							D2B.write(false);
-						} else {
-							toggleButtonRight_.setEnabled(true);
-							toggleButtonBack_.setEnabled(true);
-							toggleButtonForward_.setEnabled(true);
-							PWM1.setDutyCycle(0);
-							PWM2.setDutyCycle(0);
-						}
-					} catch (ConnectionLostException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			toggleButtonRight_.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						if (isChecked) {
-							toggleButtonBack_.setEnabled(false);
-							toggleButtonLeft_.setEnabled(false);
-							toggleButtonForward_.setEnabled(false);
-							PWM1.setDutyCycle(1);
-							PWM2.setDutyCycle(1);
-							D1A.write(true);
-							D1B.write(false);
-							D2A.write(false);
-							D2B.write(true);
-						} else {
-							toggleButtonBack_.setEnabled(true);
-							toggleButtonLeft_.setEnabled(true);
-							toggleButtonForward_.setEnabled(true);
-							PWM1.setDutyCycle(0);
-							PWM2.setDutyCycle(0);
-						}
-					} catch (ConnectionLostException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			enableUi(true);
-		}
-
-		@Override
-		public void loop() throws ConnectionLostException, InterruptedException {
-//			led_.write(!ledToggleButton_.isChecked());
-//			PWM1.setDutyCycle(1);
-//			PWM2.setDutyCycle(1);
-//			D1A.write(true);
-//			D1B.write(false);
-//			D2A.write(true);
-//			D2B.write(false);
-
-			Thread.sleep(20);
-		}
-
-		@Override
-		public void disconnected() {
-			enableUi(false);
-		}
-	}
-
-	@Override
-	protected IOIOLooper createIOIOLooper() {
-		return new Looper();
-	}
-
-	private void enableUi(final boolean enable) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				ledToggleButton_.setEnabled(enable);
-				toggleButtonRight_.setEnabled(enable);
-				toggleButtonBack_.setEnabled(enable);
-				toggleButtonLeft_.setEnabled(enable);
-				toggleButtonForward_.setEnabled(enable);
-			}
-		});
-	}
 
 	/**
 	 * Handle incoming calls. TODO: Implement an accept/reject functionality.
@@ -354,12 +274,18 @@ public class QBotActivity extends IOIOActivity {
 		if(this.mPubNub!=null){
 			this.mPubNub.unsubscribeAll();
 		}
+		// Unbind from the service
+		if (mBound) {
+			unbindService(mConnection);
+			mBound = false;
+		}
 	}
 	protected void onDestroy(){
 		super.onDestroy();
 		if(this.mPubNub!=null){
 			this.mPubNub.unsubscribeAll();
 		}
+		stopService(new Intent(this, BgIOIOService.class));
 	}
 
 	@Override
@@ -393,6 +319,8 @@ public class QBotActivity extends IOIOActivity {
 		}
 		return true;
 	}
+
+	//publish notification to GCM channel
 	public void sendNotification(View view) {
 		PnGcmMessage gcmMessage = new PnGcmMessage();
 		JSONObject jso = new JSONObject();
@@ -419,6 +347,23 @@ public class QBotActivity extends IOIOActivity {
 		@Override
 		public void errorCallback(String channel, PubnubError error) {
 			Log.i(TAG, "Error On Channel GCMPush : " + error);
+		}
+	};
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className,
+									   IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get LocalService instance
+			BgIOIOService.LocalBinder binder = (BgIOIOService.LocalBinder) service;
+			mService = binder.getServiceInstance();
+			mBound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mBound = false;
 		}
 	};
 }
