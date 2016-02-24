@@ -70,17 +70,18 @@ function connectRobot() {
 	});
 }
 
-function phoneStart() {
+function phoneStart(x) {
 	var video_in = document.getElementById("vidIn");
-	// var video_out = document.getElementById("vidOut");
+	var video_out = document.getElementById("vidOut");
 	var phone = window.phone = PHONE({
 		number : userId || "Anonymous", // listen on username line else anonymous
 		publish_key : pub_key, // Your Pub Key
 		subscribe_key : sub_key, // Your Sub Key
 		ssl : true,
 		media: { audio : true, video : true },
-		oneway: true,
+		oneway: Boolean(x),
 	});
+	phone.getusermedia;
 	phone.ready(function(){
 		console.log("Phone ON!");
 	});
@@ -89,13 +90,15 @@ function phoneStart() {
 			document.getElementById("vidBlock").style.display = 'flex';
 			document.getElementById("controlBlock").style.display = 'flex';
 			document.getElementById("robotname_submit").disabled = true;
-			video_in.innerHTML = "";
 			video_in.appendChild(session.video);
-	    	//$('#vidOut').append(phone.video);
+	    	if (!phone.oneway) {
+	    		video_out.appendChild(phone.video);
+	    		video_out.style.display='block';
+	    	}
 	    });
 	    session.ended(function(session) { 
-	    	video_in.innerHTML = '';
-	    	//$('#vidOut').innerHTML = '';
+	    	video_in.innerHTML = "";
+	    	video_out.innerHTML = "";
 	    	document.getElementById("vidBlock").style.display = 'none';
 	    	document.getElementById("controlBlock").style.display = 'none';
 	    	document.getElementById("robotname_submit").disabled = false;
@@ -104,15 +107,16 @@ function phoneStart() {
 	return false;
 }
 
-function makeCall() {
+function makeCall(x) {
+	if (!window.phone)
+		{phoneStart(x)} else {window.phone=null;phoneStart(x)};
+	
 	var msg = {
 		"call_user" : userId,
 		"call_time" : new Date().getMilliseconds()
 	};
 	console.log("Calling robot...");
 	sendRobotMessage(robotStdbyCh, msg);
-	if (!window.phone)
-		phoneStart();
 	return false;
 }
 
