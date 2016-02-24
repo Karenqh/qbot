@@ -81,7 +81,7 @@ public class RegistrationIntentService extends IntentService {
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
         mPubNub.enablePushNotificationsOnChannel(
-                "GCMPush",
+                Constants.GCM_CHANNEL,
                 token);
         Log.i("PubNub","PushNotificationChannelEnabled");
     }

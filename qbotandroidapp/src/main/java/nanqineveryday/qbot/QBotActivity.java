@@ -86,7 +86,7 @@ public class QBotActivity extends Activity {
 				if(mBound) {if (isChecked) {
 					mService.setIOIOCommand(IOIOCommands.LED);
 				} else {
-					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					mService.setIOIOCommand(IOIOCommands.STOP);
 				}}
 			}
 		});
@@ -98,7 +98,7 @@ public class QBotActivity extends Activity {
 					toggleButtonLeft_.setEnabled(false);
 					toggleButtonForward_.setEnabled(false);
 				} else {
-					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					mService.setIOIOCommand(IOIOCommands.STOP);
 					toggleButtonRight_.setEnabled(true);
 					toggleButtonLeft_.setEnabled(true);
 					toggleButtonForward_.setEnabled(true);
@@ -113,7 +113,7 @@ public class QBotActivity extends Activity {
 					toggleButtonLeft_.setEnabled(false);
 					toggleButtonBack_.setEnabled(false);
 				} else {
-					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					mService.setIOIOCommand(IOIOCommands.STOP);
 					toggleButtonRight_.setEnabled(true);
 					toggleButtonLeft_.setEnabled(true);
 					toggleButtonBack_.setEnabled(true);
@@ -128,7 +128,7 @@ public class QBotActivity extends Activity {
 					toggleButtonBack_.setEnabled(false);
 					toggleButtonForward_.setEnabled(false);
 				} else {
-					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					mService.setIOIOCommand(IOIOCommands.STOP);
 					toggleButtonRight_.setEnabled(true);
 					toggleButtonBack_.setEnabled(true);
 					toggleButtonForward_.setEnabled(true);
@@ -143,7 +143,7 @@ public class QBotActivity extends Activity {
 					toggleButtonLeft_.setEnabled(false);
 					toggleButtonForward_.setEnabled(false);
 				} else {
-					mService.setIOIOCommand(IOIOCommands.STANDBY);
+					mService.setIOIOCommand(IOIOCommands.STOP);
 					toggleButtonBack_.setEnabled(true);
 					toggleButtonLeft_.setEnabled(true);
 					toggleButtonForward_.setEnabled(true);
@@ -178,6 +178,7 @@ public class QBotActivity extends Activity {
 	 * Subscribe to standby channel
 	 */
 	private void subscribeStdBy(){
+        setUserStatus(Constants.STATUS_AVAILABLE);
 		try {
 			this.mPubNub.subscribe(this.stdByChannel, new Callback() {
 				@Override
@@ -191,11 +192,6 @@ public class QBotActivity extends Activity {
 							dispatchIncomingCall(user);
 						} else if (jsonMsg.has(Constants.JSON_POWER)){ //turn off application
 							if (jsonMsg.getString(Constants.JSON_POWER).equals(Constants.JSON_POWER_OFF)) {
-								JSONObject jso = new JSONObject();
-								try {
-									jso.put("status", "Offline");
-								} catch (JSONException e) { }
-								publishMessage(userStdByChannel, jso);
 								Log.i(TAG, "Exit application on request by the user");
 								finish();
 							}
@@ -207,22 +203,15 @@ public class QBotActivity extends Activity {
 
 				@Override
 				public void connectCallback(String channel, Object message) {
-					Log.d("MA-iPN", "CONNECTED: " + message.toString());
-					setUserStatus(Constants.STATUS_AVAILABLE);
-					JSONObject jso = new JSONObject();
-					try {
-						jso.put("status", "Available");
-					} catch (JSONException e) { }
-					publishMessage(userStdByChannel, jso);
-				}
-
+                    Log.d("MA-iPN", "CONNECTED: " + message.toString());
+                }
 				@Override
 				public void errorCallback(String channel, PubnubError error) {
 					Log.d("MA-iPN","ERROR: " + error.toString());
 				}
 			});
 		} catch (PubnubException e){
-			Log.d("HERE", "HEREEEE");
+			Log.d("Pubnub", "subscribe error");
 			e.printStackTrace();
 		}
 	}
@@ -271,9 +260,9 @@ public class QBotActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if(this.mPubNub!=null){
-			this.mPubNub.unsubscribeAll();
-		}
+//		if(this.mPubNub!=null){ //no need to unsubscribe
+//			this.mPubNub.unsubscribeAll();
+//		}
 		// Unbind from the service
 		if (mBound) {
 			unbindService(mConnection);
@@ -284,6 +273,7 @@ public class QBotActivity extends Activity {
 		super.onDestroy();
 		if(this.mPubNub!=null){
 			this.mPubNub.unsubscribeAll();
+            setUserStatus(Constants.STATUS_OFFLINE);
 		}
 		stopService(new Intent(this, BgIOIOService.class));
 	}
@@ -294,7 +284,7 @@ public class QBotActivity extends Activity {
 		if(this.mPubNub==null){
 			initPubNub();
 		} else {
-			subscribeStdBy();
+		//	subscribeStdBy();
 		}
 	}
 
@@ -325,12 +315,12 @@ public class QBotActivity extends Activity {
 		PnGcmMessage gcmMessage = new PnGcmMessage();
 		JSONObject jso = new JSONObject();
 		try {
-			jso.put("GCMSays", "hi");
+			jso.put("message", "GCM Test");
 		} catch (JSONException e) { }
 		gcmMessage.setData(jso);
 		PnMessage message = new PnMessage(
 				this.mPubNub,
-				"GCMPush",
+				Constants.GCM_CHANNEL,
 				gcmsendcallback,
 				gcmMessage);
 		try {

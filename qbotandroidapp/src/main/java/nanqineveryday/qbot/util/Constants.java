@@ -24,7 +24,7 @@ public class Constants {
     public static final String JSON_POWER_OFF = "power_off";
 
     // JSON for user messages
-    public static final String JSON_USER_MSG  = "user_message";
+    public static final String GCM_CHANNEL  = "GCMPush";
     public static final String JSON_MSG_UUID  = "msg_uuid";
     public static final String JSON_MSG       = "msg_message";
     public static final String JSON_TIME      = "msg_timestamp";
@@ -33,4 +33,6 @@ public class Constants {
     public static final String STATUS_OFFLINE   = "Offline";
     public static final String STATUS_BUSY      = "Busy";
 
+    // Control Messages
+    public static final String JSON_CONTROL_MSG  = "control_msg";
 }

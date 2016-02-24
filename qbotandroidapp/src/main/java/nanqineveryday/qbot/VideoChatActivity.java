@@ -39,9 +39,11 @@ import org.webrtc.VideoTrack;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.kevingleason.pnwebrtc.PnRTCListener;
 import nanqineveryday.qbot.adapters.ChatAdapter;
 import nanqineveryday.qbot.adt.ChatMessage;
 import nanqineveryday.qbot.util.Constants;
+import nanqineveryday.qbot.util.IOIOCommands;
 import nanqineveryday.qbot.util.LogRTCListener;
 import me.kevingleason.pnwebrtc.PnPeer;
 import me.kevingleason.pnwebrtc.PnRTCClient;
@@ -81,8 +83,7 @@ public class VideoChatActivity extends ListActivity {
         if (extras == null || !extras.containsKey(Constants.USER_NAME)) {
             Intent intent = new Intent(this, QBotActivity.class);
             startActivity(intent);
-            Toast.makeText(this, "Need to pass username to VideoChatActivity in intent extras (Constants.USER_NAME).",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Need to pass username to VideoChatActivity in intent extras (Constants.USER_NAME).", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -114,7 +115,7 @@ public class VideoChatActivity extends ListActivity {
         String backFacingCam = VideoCapturerAndroid.getNameOfBackFacingDevice();
 
         // Creates a VideoCapturerAndroid instance for the device name
-        VideoCapturer capturer = VideoCapturerAndroid.create(backFacingCam);
+        VideoCapturer capturer = VideoCapturerAndroid.create(frontFacingCam);
 
         // First create a Video Source, then we can make a Video Track
         localVideoSource = pcFactory.createVideoSource(capturer, this.pnRTCClient.videoConstraints());
@@ -152,7 +153,7 @@ public class VideoChatActivity extends ListActivity {
         this.pnRTCClient.attachLocalMediaStream(mediaStream);
 
         // Listen on a channel. This is your "phone number," also set the max chat users.
-        this.pnRTCClient.listenOn("Kevin");
+        this.pnRTCClient.listenOn(username);
         this.pnRTCClient.setMaxConnections(1);
 
         // If the intent contains a number to dial, call it now that you are connected.
@@ -287,10 +288,10 @@ public class VideoChatActivity extends ListActivity {
     }
 
     /**
-     * LogRTCListener is used for debugging purposes, it prints all RTC messages.
+     * LogRTCListener extends PnRTCListener is used for debugging purposes, it prints all RTC messages.
      * DemoRTC is just a Log Listener with the added functionality to append screens.
      */
-    private class DemoRTCListener extends LogRTCListener {
+    private class DemoRTCListener extends PnRTCListener {
         @Override
         public void onLocalStream(final MediaStream localStream) {
             super.onLocalStream(localStream); // Will log values
@@ -299,6 +300,7 @@ public class VideoChatActivity extends ListActivity {
                 public void run() {
                     if(localStream.videoTracks.size()==0) return;
                     localStream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
+                    mCallStatus.setVisibility(View.GONE);
                 }
             });
         }
@@ -328,16 +330,9 @@ public class VideoChatActivity extends ListActivity {
             if (!(message instanceof JSONObject)) return; //Ignore if not JSONObject
             JSONObject jsonMsg = (JSONObject) message;
             try {
-                String uuid = jsonMsg.getString(Constants.JSON_MSG_UUID);
-                String msg  = jsonMsg.getString(Constants.JSON_MSG);
-                long   time = jsonMsg.getLong(Constants.JSON_TIME);
-                final ChatMessage chatMsg = new ChatMessage(uuid, msg, time);
-                VideoChatActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mChatAdapter.addMessage(chatMsg);
-                    }
-                });
+                if (jsonMsg.has(IOIOCommands.IOIO_CONTROL_MSG)) {
+                    mService.setIOIOCommand(jsonMsg.getString(IOIOCommands.IOIO_CONTROL_MSG));
+                }
             } catch (JSONException e){
                 e.printStackTrace();
             }
