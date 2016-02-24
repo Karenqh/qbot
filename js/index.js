@@ -22,6 +22,7 @@ function login() {
 	var pubnub = window.pubnub = PUBNUB({
 		publish_key : pub_key,
 		subscribe_key : sub_key,
+		ssl : true,
 		uuid : userId
 	});
     //check connectivity
