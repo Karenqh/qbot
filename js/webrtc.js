@@ -16,6 +16,8 @@ var PHONE = window.PHONE = function(config) {
     var myconnection  = false;
     var mediaconf     = config.media || { audio : true, video : true };
     var conversations = {};
+    var oneway        = config.oneway || false ;
+    var broadcast     = config.broadcast || false;
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // RTC Peer Connection Session (one per call)
@@ -186,7 +188,8 @@ var PHONE = window.PHONE = function(config) {
             talk.message   = function(cb) {talk.usermsg = cb; return talk};
 
             // Add Local Media Streams Audio Video Mic Camera
-            talk.pc.addStream(mystream);
+            //  If answering and oneway streaming, do not attach stream
+            if (!oneway) talk.pc.addStream(mystream);
 
             // Notify of Call Status
             update_conversation( talk, 'connecting' );
@@ -290,6 +293,13 @@ var PHONE = window.PHONE = function(config) {
             talk.hangup();
         } );
     };
+    
+    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // Expose local stream and pubnub object
+    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    PHONE.mystream = mystream;
+    PHONE.pubnub   = pubnub;
+    PHONE.oneway   = oneway;
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Auto-hangup on Leave
@@ -391,7 +401,7 @@ var PHONE = window.PHONE = function(config) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     function onready(subscribed) {
         if (subscribed) myconnection = true;
-        if (!(mystream && myconnection)) return;
+        if (!(mystream || oneway) && myconnection) return;
 
         connectcb();
         readycb();
@@ -401,6 +411,12 @@ var PHONE = window.PHONE = function(config) {
     // Prepare Local Media Camera and Mic
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     function getusermedia() {
+    	if (oneway && !broadcast){
+	        if (!PeerConnection){ return unablecb(); }
+	        onready();
+	        subscribe();
+            return;
+        }
         navigator.getUserMedia( mediaconf, function(stream) {
             if (!stream) return unablecb(stream);
             mystream = stream;

@@ -12,7 +12,7 @@ body {
   justify-content: space-around;
   flex-wrap:wrap;
   align-items: center;
-  margin: 50px 0;
+  margin: auto;
 }
 
 .flexbox_vertical {
@@ -21,7 +21,7 @@ body {
   justify-content: space-around;
   align-items: center;
 }
-.input-group {width: 300px;}
+.input-group {max-width: 250px;}
 
 .block {
 	margin: auto;
@@ -29,32 +29,35 @@ body {
 }
 
 #vidBlock {
-  display:flex;
-  width: 500px;
+  display:none;
+  min-width: 400px;
   //flex: 2;
 }
 
-#motionBlock {
-  display:flex;
-  min-height: 150px;
-  
+video {max-height: 450px;max-width: 400px;}
+
+#controlBlock {
+  display:none;
 }
+
+#motionControlBlock {min-height: 173px;}
 
 .div-table-row {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  min-width : 220px;
+  min-width : 250px;
 }
-
+.btn-xs {width: 90px;}
+.btn-info {width: 75px;}
 /* Small screens */
 @media all and (max-width: 600px) {
 body {
   font-size:12px;
  }
  
-#vidBlock{
-  width: 360px;
+video{
+  height: 300px;
   //flex: 2;
 }
 }

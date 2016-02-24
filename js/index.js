@@ -14,7 +14,9 @@ var robotId = "";
 
 //Initialize PubNub
 function login() {
-	var inputbox = document.getElementById("username")
+	var inputbox = document.getElementById("username");
+	var button = document.getElementById("login_submit");
+	button.className = "btn btn-default";
 	userId = safeId(inputbox.value) || "Anonymous";
 	userStdbyCh = userId + standby_suffix;
 	var pubnub = window.pubnub = PUBNUB({
@@ -24,24 +26,31 @@ function login() {
 	});
     //check connectivity
 	pubnub.subscribe({
-		channel : userStdbyCh,	
-		message : userStdbyChMessageCB,
-		connect : function(e) {
-			var button = document.getElementById("login_submit");
-			button.disabled = true;
-			button.className = "btn btn-success disabled";
-			console.log("Connected to PubNub and ready!");
+		channel : userStdbyCh,
+		message: function(m){console.log(m)},
+		connect : function(m) {
+			button.className = "btn btn-success";
+			console.log("Connected to pubnub channel: " + userStdbyCh);
 		}
 	});
 	return false;
 }
 
 function connectRobot() {
-	if (!window.pubnub)
+	if (!window.pubnub) {
 		alert("Login First!");
+		return false;}
 	var input = document.getElementById("robotname");
 	robotId = safeId(input.value);
 	robotStdbyCh = robotId + standby_suffix;
+	pubnub.subscribe({
+		channel : robotStdbyCh,	
+		message: function(m){console.log(m)},
+		presence : function(m){robotPresenceCB(m)},
+		connect : function(m) {
+			console.log("Connected to robot-stdby channal and ready!");
+		}
+	});
 	// Check robot status and wake up robot
 	window.pubnub.state({
 	    channel:robotStdbyCh,
@@ -59,7 +68,6 @@ function connectRobot() {
 	    	}
 	    }
 	});
-	return false;
 }
 
 function phoneStart() {
@@ -70,7 +78,8 @@ function phoneStart() {
 		publish_key : pub_key, // Your Pub Key
 		subscribe_key : sub_key, // Your Sub Key
 		ssl : true,
-		media: { audio : true, video : false },
+		media: { audio : true, video : true },
+		oneway: true,
 	});
 	phone.ready(function(){
 		console.log("Phone ON!");
@@ -78,14 +87,18 @@ function phoneStart() {
 	phone.receive(function(session){
 	    session.connected(function(session) {
 			document.getElementById("vidBlock").style.display = 'flex';
-			document.getElementById("motionBlock").style.display = 'flex';
-	    	video_in.innerHTML="";
-	    	video_in.appendChild(session.video);  
+			document.getElementById("controlBlock").style.display = 'flex';
+			document.getElementById("robotname_submit").disabled = true;
+			video_in.innerHTML = "";
+			video_in.appendChild(session.video);
+	    	//$('#vidOut').append(phone.video);
 	    });
 	    session.ended(function(session) { 
-	    	video_in.innerHTML=""; 
+	    	video_in.innerHTML = '';
+	    	//$('#vidOut').innerHTML = '';
 	    	document.getElementById("vidBlock").style.display = 'none';
-	    	document.getElementById("motionBlock").style.display = 'none';
+	    	document.getElementById("controlBlock").style.display = 'none';
+	    	document.getElementById("robotname_submit").disabled = false;
 	    });
 	});
 	return false;
@@ -128,7 +141,6 @@ function disconnectRobot() {
 	    	if (m.status=="Available"){
 	    		var msg = {
 	    				"power" : "power_off",
-	    				"call_time" : new Date().getMilliseconds()
 	    			};
 	    		sendRobotMessage(robotStdbyCh, msg)
 	    		console.log("Turning off robot");
@@ -140,6 +152,7 @@ function disconnectRobot() {
 	});
 	return false;
 }
+
 
 function sendRobotMessage(ch, msg) {
 	if (!window.pubnub)
@@ -154,12 +167,12 @@ function sendRobotMessage(ch, msg) {
 }
 
 //process messaged received from robot standby channel
-function userStdbyChMessageCB(m){
+function robotPresenceCB(m){
 	//robot is online
-	if (m.status == "Available") {
+	if (m.action == "join" && m.uuid==robotId) {
 		buttonConnected();
 	}
-	if (m.status == "Offline") {
+	if (m.action == "leave" && m.uuid==robotId) {
 		buttonDisconnected();
 	}
 }
@@ -188,7 +201,32 @@ function formatTime(millis) {
 	var a = (Math.floor(h / 12) === 0) ? "am" : "pm";
 	return (h % 12) + ":" + m + "." + s + " " + a;
 }
-
+//handle button click
+function fowardButton(){
+	var msg = { "ioioControlMsg" : "forward",};
+	phone.send(msg);
+	console.log('control message');
+}
+function leftButton(){
+	var msg = { "ioioControlMsg" : "left",};
+	phone.send(msg);
+	console.log('control message');
+}
+function rightButton(){
+	var msg = { "ioioControlMsg" : "right",};
+	phone.send(msg);
+	console.log('control message');
+}
+function backButton(){
+	var msg = { "ioioControlMsg" : "back",};
+	phone.send(msg);
+	console.log('control message');
+}
+function stopButton(){
+	var msg = { "ioioControlMsg" : "stop",};
+	phone.send(msg);
+	console.log('control message');
+}
 // Validate user input, allow only lowercace a-z and 0-9
 function safeId(text) {
 	return ('' + text).replace(/[^a-z0-9]/gi, '').toLocaleLowerCase();

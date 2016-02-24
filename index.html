@@ -17,7 +17,7 @@
 		<p>
 	</div>
 	<div id="core" class="flexbox">
-		<div id="login" class="block flexbox_vertical">
+		<div id="login" class="block flexbox_vertical"><br>
 			<label class="control-label">Username</label>
 			<div class="input-group" id="loginform">
 				<span class="input-group-addon">@</span> <input type="text"
@@ -39,37 +39,39 @@
 			<div class="div-table-row">
 				<button onclick="makeCall()" class="btn btn-primary btn-lg">Call</button>
 				<button onclick="endCall()" class="btn btn-primary btn-lg">End Call</button>
-			</div>
+			</div><br>
 		</div>
 		<!-- Begin video block -->
 		<div id="vidBlock" class="flexbox_vertical block">
-			<div id="vidIn"></div>
-			<div id="vidOut"></div>
-			<div id="inCallBlock" class="flexbox_vertical" style="height:80px;">
+			<div id="inCallBlock" class="flexbox_vertical" style="height:50px;">
 				<div  class="div-table-row"> <!-- Buttons for in call features -->
-					<button id="audioToggle" class="btn btn-primary" onclick="audioToggle()">Audio On</button>
-					<button id="videoToggle" class="btn btn-primary" onclick="videoToggle()">Video On</button>
+					<button id="audioToggle" class="btn btn-primary btn-xs" onclick="audioToggle()">Audio On</button>
+					<button id="videoToggle" class="btn btn-primary btn-xs" onclick="videoToggle()">Video On</button>
 				</div>
 				<div class="div-table-row"> <!-- Buttons for in call features -->
-					<button id="flashToggle" class="btn btn-primary" onclick="flashToggle()">Flash Off</button>
-					<button id="cameraToggle" class="btn btn-primary" onclick="cameraToggle()">Back Camera</button>
+					<button id="flashToggle" class="btn btn-primary btn-xs" onclick="flashToggle()">Flash Off</button>
+					<button id="cameraToggle" class="btn btn-primary btn-xs" onclick="cameraToggle()">Back Camera</button>
 				</div>
 			</div>
+			<div id="vidIn" class="well well-sm"></div>
 		</div>
 		<!-- Begin control buttons block -->
-		<div id="motionBlock" class="flexbox_vertical block">
-			<div class="div-table-row">
-					<button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
-			</div>
-			<div class="div-table-row">
-					<button onclick="LeftButton()" class="btn btn-info btn-lg">Left</button>
-					<button onclick="StopButton()" class="btn btn-info btn-lg">Stop</button>
-					<button onclick="RightButton()" class="btn btn-info btn-lg">Right</button>
-			</div>
-			<div class="div-table-row">
-					<button onclick="backButton()" class="btn btn-info btn-lg">Back</button>
-			</div>
-		</div>
+		<div id="controlBlock" class="flexbox_vertical block"><br>
+			<div class="well well-sm flexbox_vertical" id="motionControlBlock">
+				<div class="div-table-row">
+						<button onclick="fowardButton()" class="btn btn-info btn-lg">Foward</button>
+				</div>
+				<div class="div-table-row">
+						<button onclick="leftButton()" class="btn btn-info btn-lg">Left</button>
+						<button onclick="stopButton()" class="btn btn-info btn-lg">Stop</button>
+						<button onclick="rightButton()" class="btn btn-info btn-lg">Right</button>
+				</div>
+				<div class="div-table-row">
+						<button onclick="backButton()" class="btn btn-info btn-lg">Back</button>
+				</div>
+			</div><br>
+			<div id="vidOut" class="well well-sm" style="display:none;"></div>
+		</div><br>
 	</div>
 
 	<div class="flexbox">
