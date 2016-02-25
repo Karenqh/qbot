@@ -67,7 +67,7 @@ public class VideoChatActivity extends ListActivity {
     private ChatAdapter mChatAdapter;
     private TextView mCallStatus;
 
-    private String username;
+    private String robotname;
     private boolean backPressed = false;
     private Thread  backPressedThread = null;
     BgIOIOService mService;
@@ -80,14 +80,14 @@ public class VideoChatActivity extends ListActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Bundle extras = getIntent().getExtras();
-        if (extras == null || !extras.containsKey(Constants.USER_NAME)) {
+        if (extras == null || !extras.containsKey(Constants.ROBOT_NAME)) {
             Intent intent = new Intent(this, QBotActivity.class);
             startActivity(intent);
-            Toast.makeText(this, "Need to pass username to VideoChatActivity in intent extras (Constants.USER_NAME).", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Need to pass robot_name to VideoChatActivity in intent extras (Constants.ROBOT_NAME).", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-        this.username      = extras.getString(Constants.USER_NAME, "");
+        this.robotname      = extras.getString(Constants.ROBOT_NAME, "");
         this.mChatList     = getListView();
         this.mChatEditText = (EditText) findViewById(R.id.chat_input);
         this.mCallStatus   = (TextView) findViewById(R.id.call_status);
@@ -107,7 +107,7 @@ public class VideoChatActivity extends ListActivity {
                 null); // Render EGL Context
 
         PeerConnectionFactory pcFactory = new PeerConnectionFactory();
-        this.pnRTCClient = new PnRTCClient(Constants.PUB_KEY, Constants.SUB_KEY, this.username);
+        this.pnRTCClient = new PnRTCClient(Constants.PUB_KEY, Constants.SUB_KEY, this.robotname);
 
         // Returns the number of cams & front/back face device name
         int camNumber = VideoCapturerAndroid.getDeviceCount();
@@ -153,37 +153,15 @@ public class VideoChatActivity extends ListActivity {
         this.pnRTCClient.attachLocalMediaStream(mediaStream);
 
         // Listen on a channel. This is your "phone number," also set the max chat users.
-        this.pnRTCClient.listenOn(username);
+        this.pnRTCClient.listenOn(robotname);
         this.pnRTCClient.setMaxConnections(1);
 
         // If the intent contains a number to dial, call it now that you are connected.
         //  Else, remain listening for a call.
-        if (extras.containsKey(Constants.CALL_USER)) {
-            String callUser = extras.getString(Constants.CALL_USER, "");
+        if (extras.containsKey(Constants.USER_NAME)) {
+            String callUser = extras.getString(Constants.USER_NAME, "");
             connectToUser(callUser);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_video_chat, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -196,9 +174,9 @@ public class VideoChatActivity extends ListActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         this.videoView.onPause();
         this.localVideoSource.stop();
+        super.onPause();
     }
 
     @Override
@@ -208,23 +186,23 @@ public class VideoChatActivity extends ListActivity {
         this.localVideoSource.restart();
     }
     protected void onStop() {
-        super.onStop();
         // Unbind from the service
         if (mBound) {
             unbindService(mConnection);
             mBound = false;
         }
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (this.localVideoSource != null) {
             this.localVideoSource.stop();
         }
         if (this.pnRTCClient != null) {
             this.pnRTCClient.onDestroy();
         }
+        super.onDestroy();
     }
 
     @Override
@@ -267,7 +245,7 @@ public class VideoChatActivity extends ListActivity {
     public void sendMessage(View view) {
         String message = mChatEditText.getText().toString();
         if (message.equals("")) return; // Return if empty
-        ChatMessage chatMsg = new ChatMessage(this.username, message, System.currentTimeMillis());
+        ChatMessage chatMsg = new ChatMessage(this.robotname, message, System.currentTimeMillis());
         mChatAdapter.addMessage(chatMsg);
         JSONObject messageJSON = new JSONObject();
         try {

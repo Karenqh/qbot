@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ import nanqineveryday.qbot.util.Constants;
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
+    private SharedPreferences mSharedPreferences;
+    private String robotname;
+    private String username;
 
     /**
      * Called when message is received.
@@ -37,9 +41,12 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
-        if (message.equals("GCMwakeUpCall_"+ Constants.USER_NAME)) {
+        this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
+        this.robotname = this.mSharedPreferences.getString(Constants.ROBOT_NAME, "");
+        this.username = this.mSharedPreferences.getString(Constants.USER_NAME, "");
+        if (message.equals("GCMwakeUpCall"+username+robotname)) {
             // start main activity
-            Log.i(TAG, "Activity waked up by remote user");
+            Log.i(TAG, "Activity waked up by remote"+username);
             Intent intent = new Intent(this, QBotActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

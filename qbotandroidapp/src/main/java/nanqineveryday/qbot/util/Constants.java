@@ -5,8 +5,8 @@ package nanqineveryday.qbot.util;
  */
 public class Constants {
     public static final String SHARED_PREFS = "nanqineveryday.qbot.ioio.SHARED_PREFS";
-    public static final String USER_NAME    = "qbotstream";
-    public static final String CALL_USER    = "nanosun";
+    public static final String ROBOT_NAME    = "nanqineveryday.qbot.ioio.ROBOT_NAME";
+    public static final String USER_NAME    = "nanqineveryday.qbot.ioio.USER_NAME";
     public static final String STDBY_SUFFIX = "-stdby";
 
     public static final String PUB_KEY = "pub-c-d77705ee-8dc9-417b-9c49-c726f65d4eeb"; // Your Pub Key
@@ -14,8 +14,8 @@ public class Constants {
 
 //    public static final String PUB_KEY = "demo"; // Your Pub Key
 //    public static final String SUB_KEY = "demo"; // Your Sub Key
-    public static final String JSON_CALL_USER = "call_user";
-    public static final String JSON_CALL_TIME = "call_time";
+    public static final String JSON_USER_CALL = "user_call";
+    public static final String JSON_USER_CALL_TIME = "call_time";
     public static final String JSON_OCCUPANCY = "occupancy";
     public static final String JSON_STATUS    = "status";
 

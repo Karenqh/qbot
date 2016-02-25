@@ -25,6 +25,8 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -46,12 +48,13 @@ import org.json.JSONObject;
 
 public class QBotActivity extends Activity {
 	private ToggleButton ledToggleButton_, toggleButtonForward_, toggleButtonBack_, toggleButtonLeft_, toggleButtonRight_;
+    private TextView usernameText_, robotnameText_;
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	private static final String TAG = "MainActivity";
-	//private SharedPreferences mSharedPreferences;
-	private String username;
+	private SharedPreferences mSharedPreferences;
+	private String robotname;
+    private String username;
 	private String stdByChannel;
-	private String userStdByChannel;
 	private Pubnub mPubNub;
 	//service bounding
 	BgIOIOService mService;
@@ -66,14 +69,36 @@ public class QBotActivity extends Activity {
 			Intent intent = new Intent(QBotActivity.this, RegistrationIntentService.class);
 			startService(intent);
 		}
+
+        //check robotname or launch login activity
+        this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
+        if ((!this.mSharedPreferences.contains(Constants.ROBOT_NAME))||(!this.mSharedPreferences.contains(Constants.USER_NAME))){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        this.robotname = this.mSharedPreferences.getString(Constants.ROBOT_NAME, "");
+        this.username = this.mSharedPreferences.getString(Constants.USER_NAME, "");
+        this.stdByChannel = this.robotname + Constants.STDBY_SUFFIX;
+
 		//Start IOIO Background Service
 		startService(new Intent(this, BgIOIOService.class));
+
+        //PubNub Initialize
+        initPubNub();
 		//Set layout
 		setContentView(R.layout.main);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-				WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        //show usernames
+        this.usernameText_  = (TextView) findViewById(R.id.username_text);
+        this.usernameText_.setText(this.username);
+        this.robotnameText_  = (TextView) findViewById(R.id.robotname_text);
+        this.robotnameText_.setText(this.robotname);
+
 		//find buttons
 		ledToggleButton_ = (ToggleButton) findViewById(R.id.ledToggleButton);
 		toggleButtonBack_= (ToggleButton) findViewById(R.id.toggleButtonBack);
@@ -150,11 +175,6 @@ public class QBotActivity extends Activity {
 				}}
 			}
 		});
-		//this.mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
-		this.username     = Constants.USER_NAME;
-		this.stdByChannel = this.username + Constants.STDBY_SUFFIX;
-        this.userStdByChannel = Constants.CALL_USER  + Constants.STDBY_SUFFIX;
-		initPubNub();
 	}
 
 	@Override
@@ -165,12 +185,66 @@ public class QBotActivity extends Activity {
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch(id){
+            case R.id.action_sign_out:
+                signOut();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        if(this.mPubNub!=null){ //no need to unsubscribe?
+            this.mPubNub.unsubscribeAll();
+        }
+        // Unbind from the service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(this.mPubNub==null){
+            initPubNub();
+        } else {
+            subscribeStdBy();
+        }
+    }
+    protected void onDestroy(){
+        Log.i(TAG, "onDestroy()");
+        if(this.mPubNub!=null){
+            setUserStatus(Constants.STATUS_OFFLINE);
+            this.mPubNub.unsubscribeAll();
+        }
+        stopService(new Intent(this, BgIOIOService.class));
+        super.onDestroy();
+    }
 	/**
 	 * Subscribe to standby channel so that it doesn't interfere with the WebRTC Signaling.
 	 */
 	public void initPubNub(){
 		this.mPubNub  = new Pubnub(Constants.PUB_KEY, Constants.SUB_KEY);
-		this.mPubNub.setUUID(this.username);
+		this.mPubNub.setUUID(this.robotname);
 		subscribeStdBy();
 	}
 
@@ -187,9 +261,9 @@ public class QBotActivity extends Activity {
 					if (!(message instanceof JSONObject)) return; // Ignore if not JSONObject
 					JSONObject jsonMsg = (JSONObject) message;
 					try {
-						if (jsonMsg.has(Constants.JSON_CALL_USER)) {
-							String user = jsonMsg.getString(Constants.JSON_CALL_USER);
-							dispatchIncomingCall(user);
+						if (jsonMsg.has(Constants.JSON_USER_CALL)) {
+							if (username.equals(jsonMsg.getString(Constants.JSON_USER_CALL))){
+							dispatchIncomingCall(username);}
 						} else if (jsonMsg.has(Constants.JSON_POWER)){ //turn off application
 							if (jsonMsg.getString(Constants.JSON_POWER).equals(Constants.JSON_POWER_OFF)) {
 								Log.i(TAG, "Exit application on request by the user");
@@ -229,24 +303,23 @@ public class QBotActivity extends Activity {
 	}
 
 
-
-
 	/**
 	 * Handle incoming calls. TODO: Implement an accept/reject functionality.
 	 * @param userId
 	 */
 	private void dispatchIncomingCall(String userId){
 		Intent intent = new Intent(QBotActivity.this, VideoChatActivity.class);
-		intent.putExtra(Constants.USER_NAME, username);
-		intent.putExtra(Constants.CALL_USER, userId);
+		intent.putExtra(Constants.USER_NAME, userId);
+		intent.putExtra(Constants.ROBOT_NAME, robotname);
 		startActivity(intent);
 	}
 
 	private void setUserStatus(String status){
+        Log.i(TAG, "set user status " + status);
 		try {
 			JSONObject state = new JSONObject();
 			state.put(Constants.JSON_STATUS, status);
-			this.mPubNub.setState(this.stdByChannel, this.username, state, new Callback() {
+			this.mPubNub.setState(this.stdByChannel, this.robotname, state, new Callback() {
 				@Override
 				public void successCallback(String channel, Object message) {
 					Log.d("MA-sUS","State Set: " + message.toString());
@@ -257,36 +330,15 @@ public class QBotActivity extends Activity {
 		}
 	}
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-//		if(this.mPubNub!=null){ //no need to unsubscribe
-//			this.mPubNub.unsubscribeAll();
-//		}
-		// Unbind from the service
-		if (mBound) {
-			unbindService(mConnection);
-			mBound = false;
-		}
-	}
-	protected void onDestroy(){
-		super.onDestroy();
-		if(this.mPubNub!=null){
-			this.mPubNub.unsubscribeAll();
-            setUserStatus(Constants.STATUS_OFFLINE);
-		}
-		stopService(new Intent(this, BgIOIOService.class));
-	}
-
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		if(this.mPubNub==null){
-			initPubNub();
-		} else {
-		//	subscribeStdBy();
-		}
-	}
+    //clear credentials and goto login page
+    public void signOut(){
+        this.mPubNub.unsubscribeAll();
+        this.mSharedPreferences.edit().remove(Constants.USER_NAME).apply();
+        this.mSharedPreferences.edit().remove(Constants.ROBOT_NAME).apply();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("oldUsername", this.username);
+        startActivity(intent);
+    }
 
 
 	/**
@@ -309,36 +361,6 @@ public class QBotActivity extends Activity {
 		}
 		return true;
 	}
-
-	//publish notification to GCM channel
-	public void sendNotification(View view) {
-		PnGcmMessage gcmMessage = new PnGcmMessage();
-		JSONObject jso = new JSONObject();
-		try {
-			jso.put("message", "GCM Test");
-		} catch (JSONException e) { }
-		gcmMessage.setData(jso);
-		PnMessage message = new PnMessage(
-				this.mPubNub,
-				Constants.GCM_CHANNEL,
-				gcmsendcallback,
-				gcmMessage);
-		try {
-			message.publish();
-		} catch (PubnubException e) {
-			e.printStackTrace();
-		}
-	}
-	public static Callback gcmsendcallback = new Callback() {
-		@Override
-		public void successCallback(String channel, Object message) {
-			Log.i(TAG, "Success on Channel GCMPush : " + message);
-		}
-		@Override
-		public void errorCallback(String channel, PubnubError error) {
-			Log.i(TAG, "Error On Channel GCMPush : " + error);
-		}
-	};
 
 	/** Defines callbacks for service binding, passed to bindService() */
 	private ServiceConnection mConnection = new ServiceConnection() {

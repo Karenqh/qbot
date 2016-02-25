@@ -2,7 +2,11 @@
 <resources>
     <string name="app_name">Qbot Android Client</string>
     <string name="title_activity_video_chat">Video Call</string>
+    <string name="title_activity_login">Log In</string>
     <string name="action_settings">Settings</string>
     <string name="local_service_started">IOIO service running</string>
-
+    <string name="login_title">Name your robot!</string>
+    <string name="robotname_hint">Robot name...</string>
+    <string name="username_hint">Username...</string>
+    <string name="login_submit">Submit</string>
 </resources>
