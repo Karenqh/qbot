@@ -61,10 +61,10 @@ function connectRobot() {
 	    		buttonConnected();
 	    	}
 	    	else {
-	    		var msg = {
-	    				"pn_gcm" : {"data" : {message : "GCMwakeUpCall_"+robotId}}
+	    		var msg1 = {
+	    				"pn_gcm" : {"data" : {message : "GCMwakeUpCall"+userId+robotId}}
 	    			};
-	    		sendRobotMessage("GCMPush", msg)
+	    		sendRobotMessage("GCMPush", msg1)
 	    		console.log("Publish to gcm channel: " + robotId);
 	    	}
 	    }
@@ -113,7 +113,7 @@ function makeCall(x) {
 		{phoneStart(x)} else {window.phone=null;phoneStart(x)};
 	
 	var msg = {
-		"call_user" : userId,
+		"user_call" : userId,
 		"call_time" : new Date().getMilliseconds()
 	};
 	console.log("Calling robot...");
@@ -144,10 +144,8 @@ function disconnectRobot() {
 	    uuid : robotId,
 	    callback: function(m){
 	    	if (m.status=="Available"){
-	    		var msg = {
-	    				"power" : "power_off",
-	    			};
-	    		sendRobotMessage(robotStdbyCh, msg)
+	    		var msg = {"power" : "power_off",};
+	    		sendRobotMessage(robotStdbyCh, msg);
 	    		console.log("Turning off robot");
 	    	}
 	    	else {
