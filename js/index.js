@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 var chat_box = document.getElementById("chat-box");
@@ -25,7 +25,7 @@ function login() {
 		ssl : true,
 		uuid : userId
 	});
-    //check connectivity
+  //check connectivity
 	pubnub.subscribe({
 		channel : userStdbyCh,
 		message: function(m){console.log(m)},
@@ -44,14 +44,17 @@ function connectRobot() {
 	var input = document.getElementById("robotname");
 	robotId = safeId(input.value);
 	robotStdbyCh = robotId + standby_suffix;
-	pubnub.subscribe({
-		channel : robotStdbyCh,	
-		message: function(m){console.log(m)},
-		presence : function(m){robotPresenceCB(m)},
-		connect : function(m) {
-			console.log("Connected to robot-stdby channal and ready!");
-		}
-	});
+	//subscribe to robot-stdby channel ONCE
+	if (!window.subscribeRobot) {
+		var subscribeRobot = window.subscribeRobot = (function(){pubnub.subscribe({
+			channel : robotStdbyCh,
+			message: function(m){console.log(m)},
+			presence : function(m){robotPresenceCB(m)},
+			connect : function(m) {
+				console.log("Connected to "+ robotStdbyCh + " and ready!");
+			}
+		});})();
+	}
 	// Check robot status and wake up robot
 	window.pubnub.state({
 	    channel:robotStdbyCh,
@@ -82,12 +85,13 @@ function phoneStart(x) {
 		media: { audio : true, video : true },
 		oneway: Boolean(x),
 	});
-	phone.getusermedia;
 	phone.ready(function(){
 		console.log("Phone ON!");
 	});
 	phone.receive(function(session){
+		console.log("web-rtc received");
 	    session.connected(function(session) {
+				console.log("web-rtc connected");
 			document.getElementById("vidBlock").style.display = 'flex';
 			document.getElementById("controlBlock").style.display = 'flex';
 			document.getElementById("robotname_submit").disabled = true;
@@ -97,7 +101,7 @@ function phoneStart(x) {
 	    		video_out.style.display='block';
 	    	}
 	    });
-	    session.ended(function(session) { 
+	    session.ended(function(session) {
 	    	video_in.innerHTML = "";
 	    	video_out.innerHTML = "";
 	    	document.getElementById("vidBlock").style.display = 'none';
@@ -110,8 +114,8 @@ function phoneStart(x) {
 
 function makeCall(x) {
 	if (!window.phone)
-		{phoneStart(x)} else {window.phone=null;phoneStart(x)};
-	
+		{phoneStart(x)}// else {window.phone=null;phoneStart(x)};
+
 	var msg = {
 		"user_call" : userId,
 		"call_time" : new Date().getMilliseconds()
@@ -129,8 +133,8 @@ function audioToggle(){
 
 function videoToggle(){
 	var video = ctrl.toggleVideo();
-	if (!video) $('#videoToggle').html('Video Off'); 
-	else $('#videoToggle').html('Video On'); 
+	if (!video) $('#videoToggle').html('Video Off');
+	else $('#videoToggle').html('Video On');
 }
 
 function endCall() {
@@ -146,7 +150,6 @@ function disconnectRobot() {
 	    	if (m.status=="Available"){
 	    		var msg = {"power" : "power_off",};
 	    		sendRobotMessage(robotStdbyCh, msg);
-	    		console.log("Turning off robot");
 	    	}
 	    	else {
 	    		buttonDisconnected();
@@ -164,7 +167,7 @@ function sendRobotMessage(ch, msg) {
 		channel : ch,
 		message : msg,
 		callback : function(m) {
-			console.log('send message to robot.');
+			console.log('send message to robot.' + msg);
 		}
 	});
 }
@@ -208,27 +211,27 @@ function formatTime(millis) {
 function fowardButton(){
 	var msg = { "ioioControlMsg" : "forward",};
 	phone.send(msg);
-	console.log('control message');
+	console.log('control message forward');
 }
 function leftButton(){
 	var msg = { "ioioControlMsg" : "left",};
 	phone.send(msg);
-	console.log('control message');
+	console.log('control message left');
 }
 function rightButton(){
 	var msg = { "ioioControlMsg" : "right",};
 	phone.send(msg);
-	console.log('control message');
+	console.log('control message right');
 }
 function backButton(){
 	var msg = { "ioioControlMsg" : "back",};
 	phone.send(msg);
-	console.log('control message');
+	console.log('control message back');
 }
 function stopButton(){
 	var msg = { "ioioControlMsg" : "stop",};
 	phone.send(msg);
-	console.log('control message');
+	console.log('control message stop');
 }
 // Validate user input, allow only lowercace a-z and 0-9
 function safeId(text) {
