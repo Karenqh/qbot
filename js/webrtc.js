@@ -45,7 +45,7 @@ var PHONE = window.PHONE = function(config) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Local Microphone and Camera Media (one per device)
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    navigator.getUserMedia = 
+    navigator.getUserMedia =
         navigator.getUserMedia       ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia    ||
@@ -149,12 +149,12 @@ var PHONE = window.PHONE = function(config) {
                 clearInterval(talk.snapi);
 
                 if (signal !== false) transmit( number, { hangup : true } );
-
+                talk.stop();
                 talk.end(talk);
                 talk.pc.close();
                 close_conversation(number);
             };
-            
+
             // Stop Audio/Video Stream
             talk.stop = function() {
                 if (mystream) mystream.stop();
@@ -293,7 +293,7 @@ var PHONE = window.PHONE = function(config) {
             talk.hangup();
         } );
     };
-    
+
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Expose local stream and pubnub object
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -401,7 +401,6 @@ var PHONE = window.PHONE = function(config) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     function onready(subscribed) {
         if (subscribed) myconnection = true;
-        if (!(mystream || oneway) && myconnection) return;
 
         connectcb();
         readycb();
@@ -413,16 +412,12 @@ var PHONE = window.PHONE = function(config) {
     function getusermedia() {
     	if (oneway && !broadcast){
 	        if (!PeerConnection){ return unablecb(); }
-	        onready();
-	        subscribe();
             return;
         }
         navigator.getUserMedia( mediaconf, function(stream) {
             if (!stream) return unablecb(stream);
             mystream = stream;
             snapshots_setup(stream);
-            onready();
-            subscribe();
         }, function(info) {
             debugcb(info);
             return unablecb(info);
@@ -476,6 +471,7 @@ var PHONE = window.PHONE = function(config) {
         // If Peer Calling Inbound (Incoming)
         if ( message.packet.sdp && !talk.received ) {
             talk.received = true;
+            getusermedia();
             receivercb(talk);
         }
 
@@ -555,7 +551,7 @@ var PHONE = window.PHONE = function(config) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Main - Request Camera and Mic
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    getusermedia()
+    subscribe();
 
     return PHONE;
 };

@@ -115,7 +115,7 @@ function phoneStart(x) {
 function makeCall(x) {
 	if (!window.phone)
 		{phoneStart(x)}// else {window.phone=null;phoneStart(x)};
-
+  window.phone.oneway=Boolean(x);
 	var msg = {
 		"user_call" : userId,
 		"call_time" : new Date().getMilliseconds()
