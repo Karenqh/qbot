@@ -5,6 +5,7 @@ This web interface can connect to and control a 4-wheel android robot - *Qbot*.
 
 ### TODO
  - [x] Wake android robot by sending a push message
- - [ ] Basic movement control
- - [ ] Video/Audio transmit toggle
- - [ ] movable and stable view control by reading phone accelerometer data
+ - [x] Basic movement control
+ - [ ] reflect IOIO connection status
+ - [ ] Video/Audio transmit toggle (webrtc inmplement)
+ - [ ] movable and stable view control by reading phone accelerometer data (servo driver)

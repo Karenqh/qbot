@@ -86,7 +86,7 @@ function phoneStart(x) {
 		oneway: Boolean(x),
 	});
 	phone.ready(function(){
-		console.log("Phone ON!");
+		console.log("Phone ready!");
 	});
 	phone.receive(function(session){
 		console.log("web-rtc received");
