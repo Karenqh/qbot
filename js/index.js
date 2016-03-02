@@ -96,26 +96,30 @@ function phoneStart(x) {
 			document.getElementById("controlBlock").style.display = 'flex';
 			document.getElementById("robotname_submit").disabled = true;
 			video_in.appendChild(session.video);
-	    	if (!phone.oneway) {
-	    		video_out.appendChild(phone.video);
-	    		video_out.style.display='block';
-	    	}
 	    });
 	    session.ended(function(session) {
 	    	video_in.innerHTML = "";
 	    	video_out.innerHTML = "";
+	    	document.getElementById("inCallBlock").style.display='none';
 	    	document.getElementById("vidBlock").style.display = 'none';
 	    	document.getElementById("controlBlock").style.display = 'none';
 	    	document.getElementById("robotname_submit").disabled = false;
 	    });
+	});
+	phone.localvideoready(function(){
+		if (!phone.oneway) {
+    		video_out.appendChild(phone.video);
+    		document.getElementById("inCallBlock").style.display='block';
+    	}
 	});
 	return false;
 }
 
 function makeCall(x) {
 	if (!window.phone)
-		{phoneStart(x)}// else {window.phone=null;phoneStart(x)};
-  window.phone.oneway=Boolean(x);
+		{phoneStart(x)}
+    window.phone.oneway=Boolean(x);
+    window.phone.getusermedia();
 	var msg = {
 		"user_call" : userId,
 		"call_time" : new Date().getMilliseconds()
@@ -126,15 +130,15 @@ function makeCall(x) {
 }
 
 function audioToggle(){
-	var audio = ctrl.toggleAudio();
-	if (!audio) $("#audioToggle").html("Audio Off");
-	else $("#audioToggle").html("Audio On");
+	var audio = phone.toggleAudio();
+	if (!audio) $("#audioToggle").html('Unmute');
+	else $("#audioToggle").html('Mute');
 }
 
 function videoToggle(){
-	var video = ctrl.toggleVideo();
-	if (!video) $('#videoToggle').html('Video Off');
-	else $('#videoToggle').html('Video On');
+	var video = phone.toggleVideo();
+	if (!video) $('#videoToggle').html('Unpause');
+	else $('#videoToggle').html('Pause');
 }
 
 function endCall() {

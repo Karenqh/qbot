@@ -104,6 +104,7 @@ var PHONE = window.PHONE = function(config) {
     var reconnectcb  = function(){};
     var callstatuscb = function(){};
     var receivercb   = function(){};
+    var mystreamreadycb   = function(){};
 
     PHONE.message    = function(cb) { messagecb    = cb };
     PHONE.ready      = function(cb) { readycb      = cb };
@@ -114,6 +115,7 @@ var PHONE = window.PHONE = function(config) {
     PHONE.disconnect = function(cb) { disconnectcb = cb };
     PHONE.reconnect  = function(cb) { reconnectcb  = cb };
     PHONE.receive    = function(cb) { receivercb   = cb };
+    PHONE.localvideoready    = function(cb) { mystreamreadycb   = cb };
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Add/Get Conversation - Creates a new PC or Returns Existing PC
@@ -134,7 +136,7 @@ var PHONE = window.PHONE = function(config) {
                 connect : function(){},
                 end     : function(){}
             };
-
+            
             // Setup Event Methods
             talk.pc.onaddstream    = config.onaddstream || onaddstream;
             talk.pc.onicecandidate = onicecandidate;
@@ -157,8 +159,11 @@ var PHONE = window.PHONE = function(config) {
 
             // Stop Audio/Video Stream
             talk.stop = function() {
-                if (mystream) mystream.stop();
-                return mystream;
+            	if ((mystream) && (!mystream.stop && mystream.getTracks)) {
+            	    mystream.getTracks().forEach(function (track) {
+            	         track.stop();
+            	      });
+            	    };
             };
 
             // Sending Messages
@@ -180,15 +185,15 @@ var PHONE = window.PHONE = function(config) {
                 talk.snap();
             }, 1500 );
             talk.snap();
-
+            
             // Nice Accessor to Update Disconnect & Establis CBs
             talk.thumbnail = function(cb) {talk.thumb   = cb; return talk};
             talk.ended     = function(cb) {talk.end     = cb; return talk};
             talk.connected = function(cb) {talk.connect = cb; return talk};
             talk.message   = function(cb) {talk.usermsg = cb; return talk};
-
+           
             // Add Local Media Streams Audio Video Mic Camera
-            //  If answering and oneway streaming, do not attach stream
+            // If answering and oneway streaming, do not attach stream
             if (!oneway) talk.pc.addStream(mystream);
 
             // Notify of Call Status
@@ -209,6 +214,7 @@ var PHONE = window.PHONE = function(config) {
     function close_conversation(number) {
         conversations[number] = null;
         delete conversations[number];
+        unsubscribe();
     }
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -300,6 +306,7 @@ var PHONE = window.PHONE = function(config) {
     PHONE.mystream = mystream;
     PHONE.pubnub   = pubnub;
     PHONE.oneway   = oneway;
+    PHONE.getusermedia = getusermedia;
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Auto-hangup on Leave
@@ -341,6 +348,7 @@ var PHONE = window.PHONE = function(config) {
         video.height = snap.height;
         video.src    = URL.createObjectURL(stream);
         video.volume = 0.0;
+        video.id = "video_out_element";
         video.play();
 
         // Canvas Settings
@@ -356,6 +364,7 @@ var PHONE = window.PHONE = function(config) {
         };
 
         PHONE.video = video;
+        mystreamreadycb();
     }
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -369,6 +378,7 @@ var PHONE = window.PHONE = function(config) {
 
         vid.setAttribute( 'autoplay', 'autoplay' );
         vid.src = URL.createObjectURL(stream);
+        vid.id="video_in_element";
 
         talk.video = vid;
         talk.connect(talk);
@@ -395,6 +405,11 @@ var PHONE = window.PHONE = function(config) {
             connect    : function() { onready(true) }
         });
     }
+    function unsubscribe() {
+        pubnub.unsubscribe({
+            channel    : config.number,
+        });
+    }
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // When Ready to Receive Calls
@@ -410,19 +425,44 @@ var PHONE = window.PHONE = function(config) {
     // Prepare Local Media Camera and Mic
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     function getusermedia() {
+        oneway = PHONE.oneway;
     	if (oneway && !broadcast){
 	        if (!PeerConnection){ return unablecb(); }
+	        onready();
+	        subscribe();
             return;
         }
         navigator.getUserMedia( mediaconf, function(stream) {
             if (!stream) return unablecb(stream);
             mystream = stream;
-            snapshots_setup(stream);
+            snapshots_setup(stream);  
+            onready();
+	        subscribe();
         }, function(info) {
             debugcb(info);
             return unablecb(info);
         } );
     }
+    
+    PHONE.toggleAudio = function(){
+		var audio = false;
+		var audioTracks = mystream.getAudioTracks();
+		for (var i = 0, l = audioTracks.length; i < l; i++) {
+			audioTracks[i].enabled = !audioTracks[i].enabled;
+			audio = audioTracks[i].enabled;
+		}
+		return audio;
+	};
+	
+	PHONE.toggleVideo = function(){
+		var video = false;
+		var videoTracks = mystream.getVideoTracks();
+		for (var i = 0, l = videoTracks.length; i < l; i++) {
+			videoTracks[i].enabled = !videoTracks[i].enabled;
+			video = videoTracks[i].enabled;
+		}
+		return video;
+	};
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Send SDP Call Offers/Answers and ICE Candidates to Peer
@@ -471,7 +511,6 @@ var PHONE = window.PHONE = function(config) {
         // If Peer Calling Inbound (Incoming)
         if ( message.packet.sdp && !talk.received ) {
             talk.received = true;
-            getusermedia();
             receivercb(talk);
         }
 
@@ -551,7 +590,6 @@ var PHONE = window.PHONE = function(config) {
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     // Main - Request Camera and Mic
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    subscribe();
 
     return PHONE;
 };

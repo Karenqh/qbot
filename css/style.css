@@ -30,17 +30,13 @@ body {
 
 #vidBlock {
   display:none;
-  min-width: 400px;
-  //flex: 2;
+  width: 400px;
 }
 
-video {max-height: 450px;max-width: 400px;}
-
-#controlBlock {
-  display:none;
-}
+#video_in_element {max-height: 450px;max-width: 400px;}
 
 #motionControlBlock {min-height: 173px;}
+#inCallBlock {height:225px}
 
 .div-table-row {
   display: flex;
@@ -48,16 +44,24 @@ video {max-height: 450px;max-width: 400px;}
   justify-content: space-around;
   min-width : 250px;
 }
-.btn-xs {width: 90px;}
+.btn-xs {margin:2px;}
 .btn-info {width: 75px;}
+
+
 /* Small screens */
 @media all and (max-width: 600px) {
-body {
-  font-size:12px;
- }
- 
-video{
-  height: 300px;
-  //flex: 2;
-}
+	body {
+	  font-size:12px;
+	 }
+	 
+	#vidBlock {
+	  width: 320px;
+	}
+	#video_in_element{
+	  height: 300px;
+	}
+	#video_out_element{
+	  height: 100px;
+	}
+	#inCallBlock {height:145px}
 }
