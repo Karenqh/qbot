@@ -5,6 +5,7 @@
 // WebRTC Simple Calling API + Mobile
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 var PHONE = window.PHONE = function(config) {
+	config.ssl        = true;         //force HTTPS
     var PHONE         = function(){};
     var pubnub        = PUBNUB(config);
     var pubkey        = config.publish_key   || 'demo';
@@ -152,6 +153,7 @@ var PHONE = window.PHONE = function(config) {
 
                 if (signal !== false) transmit( number, { hangup : true } );
                 talk.stop();
+                unsubscribe();
                 talk.end(talk);
                 talk.pc.close();
                 close_conversation(number);
@@ -214,7 +216,6 @@ var PHONE = window.PHONE = function(config) {
     function close_conversation(number) {
         conversations[number] = null;
         delete conversations[number];
-        unsubscribe();
     }
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

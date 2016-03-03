@@ -81,8 +81,6 @@ function phoneStart(x) {
 		number : userId || "Anonymous", // listen on username line else anonymous
 		publish_key : pub_key, // Your Pub Key
 		subscribe_key : sub_key, // Your Sub Key
-		ssl : true,
-		media: { audio : true, video : true },
 		oneway: Boolean(x),
 	});
 	phone.ready(function(){
